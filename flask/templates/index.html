@@ -61,13 +61,15 @@ French Homophones
     {% endfor %}
     <br />
 
-    Word's root ({{homophone.root[0]["definitions"][0]["text"][0]}}) definitions:
-    <br />
-    {% for rootDefinition in homophone.root[0]["definitions"][0]["text"][1:] %}
-    - {{rootDefinition}}
-    <br />
-    {% endfor %}
-    <br />
+    {% if homophone.root %}
+        Word's root ({{homophone.root[0]["definitions"][0]["text"][0]}}) definitions:
+        <br />
+        {% for rootDefinition in homophone.root[0]["definitions"][0]["text"][1:] %}
+        - {{rootDefinition}}
+        <br />
+        {% endfor %}
+        <br />
+    {% endif %}
 
     <br />
     Sentence examples:
