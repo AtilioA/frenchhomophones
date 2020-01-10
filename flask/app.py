@@ -67,7 +67,7 @@ def index():
         'root': root
         }
         
-    return render_template("index2.html", homophone=homophone)
+    return render_template("index.html", homophone=homophone)
     
 # @app.route("/about/")            
 # def about():
@@ -75,7 +75,7 @@ def index():
     
 @app.route("/about/")            
 def about():
-    return render_template("about2.html")
+    return render_template("about.html")
 
 if __name__ == "__main__":
     app.run(debug=True)

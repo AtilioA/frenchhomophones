@@ -1,7 +1,12 @@
 {% extends 'base.html' %}
 
-{% block head %}
-<h1>About</h1>
+{% block title_title %}
+About
+{% endblock %}
+
+
+{% block title %}
+About
 {% endblock %}
 
 {% block body %}
@@ -10,13 +15,11 @@
         
     <p>My inspiration was <a href="https://www.homophone.com/">this website</a>, which showed me interesting English homophones from time to time; I used it as my homepage (on random) until I created my own, for French.</p>
     
-    <p>I simply crawled through <a href ="https://en.wiktionary.org/w/index.php?title=Category:French_terms_with_homophones">Wiktionary's category of French homophones</a> with <a href="https://pypi.org/project/beautifulsoup4/">BeautifulSoup</a> and parsed URLs with <a href="https://pypi.org/project/wiktionaryparser/">WiktionaryParser</a>. This way, I had successfully extracted meaning from Wiktionary, I just had to create a database and a web application for it.</p>
+    <p>I simply crawled through <a href ="https://en.wiktionary.org/w/index.php?title=Category:French_terms_with_homophones">Wiktionary's category of French homophones</a> with <a href="https://pypi.org/project/beautifulsoup4/">BeautifulSoup</a> and parsed words URLs entries with <a href="https://pypi.org/project/wiktionaryparser/">WiktionaryParser</a>. This way, I had successfully extracted meaning from Wiktionary, I just had to create a database and a web application for it.</p>
     
     <p>[Paragraph about database]</p>
     
     <p>[Paragraph about web application]</p>
-    
-    
-    
+    <p>CSS template is <a href="https://github.com/jgthms/bulma/">jgthms</a>'s, everything else including favicon is my work. Feel free to contribute <a href="https://github.com/AtilioA/wiktionary-french-homophones">here</a>.</p>
 </div>
 {% endblock %}
