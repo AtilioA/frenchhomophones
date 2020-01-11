@@ -19,3 +19,17 @@
     <br />
     {% endfor %}
     {% endblock %}
+
+
+
+
+
+    {% if homophone.root %}
+        Word's root ({{homophone.root[0]["definitions"][0]["text"][0]}}) definitions:
+        <br />
+        {% for rootDefinition in homophone.root[0]["definitions"][0]["text"][1:] %}
+        - {{rootDefinition}}
+        <br />
+        {% endfor %}
+        <br />
+    {% endif %}

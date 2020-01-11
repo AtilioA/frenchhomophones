@@ -22,18 +22,24 @@ def findRandomDocument(user_collection):
 def index():
     user_collection = mongo.db.homophones
 
-    randomHomophone = findRandomDocument(user_collection)
-    print(randomHomophone)
+    homophone = findRandomDocument(user_collection)[0]
+    print(type(homophone))
+    print(homophone)
 
     # cursor = user_collection.find({"word": "abader"})
     # homophone = list(cursor)[0]
 
-    return render_template("index.html", homophone=randomHomophone[0])
+    return render_template("index.html", homophone=homophone)
 
 
 @main.route('/find')
 def find():
     pass
+
+
+@main.route("/about/")            
+def about():
+    return render_template("about.html")
 
 
 def find_document(word):

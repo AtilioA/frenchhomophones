@@ -55,32 +55,25 @@ French Homophones
     {% endif %}
     <br />
 
-    <br />
-    Word's definitions:
-    <br />
-    {% for definition in homophone.wordDefinitions %}
-    <h2>- {{ definition }}</h2>
-    {% endfor %}
-    <br />
-
-    {% if homophone.root %}
-        Word's root ({{homophone.root[0]["definitions"][0]["text"][0]}}) definitions:
+    {% if homophone.wordDefinitions %}
         <br />
-        {% for rootDefinition in homophone.root[0]["definitions"][0]["text"][1:] %}
-        - {{rootDefinition}}
+        Word's definitions:
         <br />
+        {% for definition in homophone.wordDefinitions %}
+        <h2>- {{ definition }}</h2>
         {% endfor %}
         <br />
     {% endif %}
 
-    <br />
-    Sentence examples:
-    <br />
+    {% if homophone.sentenceExamples %}
+        Sentence examples:
+        <br />
 
-    {% for example in homophone.sentenceExamples %}
-    - {{ example }}
-    <br />
-    {% endfor %}
+        {% for example in homophone.sentenceExamples %}
+        - {{ example }}
+        {% endfor %}
+        <br />
+    {% endif %}
 
     <br />
     Homophones:
