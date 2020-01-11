@@ -125,3 +125,4 @@ instance/*
 .webassets-cache
 
 django_project/
+.env

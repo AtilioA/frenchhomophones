@@ -13,9 +13,17 @@ main = Blueprint('main', __name__)
 @main.route('/')
 def index():
     user_collection = mongo.db.homophones
+
+    # cursor = user_collection.aggregate([
+    #     { "$sample": { "size": 1 } }
+    # ])
+    # print(list(cursor))
+    # print(db.user_collection.aggregate([{ $sample: { size: 1 } }]))
+    
     # user_collection.insert({'name' : 'Cristina'})
     # user_collection.insert({'name' : 'Derek'})
 
+    ### Will get replaced by MongoDB queries
     with open("french_homophones.txt", "r+", encoding="utf8") as f:
         words = f.readlines()
     randomHomophone = random.choice(words).strip()
@@ -63,9 +71,10 @@ def index():
         }
     except:
         homophone = None
+    ### Will get replaced by MongoDB queries
 
-    print("HOMOPHONE:")
-    print(homophone)
-    user_collection.insert(homophone)
+    # print("HOMOPHONE:")
+    # print(homophone)
+    # user_collection.insert(homophone)
         
     return render_template("index.html", homophone=homophone)
