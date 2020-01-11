@@ -25,10 +25,10 @@ def index():
     # randomHomophone = findRandomDocument(user_collection)
     # print(randomHomophone)
 
-    cursor = user_collection.find({"word": "abader"})
-    homophone = list(cursor)[0]
+    # cursor = user_collection.find({"word": "abader"})
+    # homophone = list(cursor)[0]
 
-    return render_template("index.html", homophone=homophone)
+    return render_template("index.html", homophone=None)
 
 
 @main.route('/find')
