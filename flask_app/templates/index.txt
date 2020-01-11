@@ -1,0 +1,21 @@
+    {% endfor %}
+        <br />
+    {% endif %}
+
+    <br />
+    Sentence examples:
+    <br />
+
+    {% for example in homophone.sentenceExamples %}
+    - {{ example }}
+    <br />
+    {% endfor %}
+
+    <br />
+    Homophones:
+    <br />
+    {% for homophones in homophone.homophones %}
+    {{ homophones }}
+    <br />
+    {% endfor %}
+    {% endblock %}
