@@ -1,6 +1,6 @@
 ## frenchhomophones
 
-This is a little Flask web application I built during 2019-2020 summer vacation.
+This is a small Flask web application I built during 2019-2020 summer vacation.
 My inspiration was <a href="https://www.homophone.com/">this website</a>, which showed me interesting English homophones from time to time; I still use it as my homepage (on random).
 
 I crawled through <a href ="https://en.wiktionary.org/w/index.php?title=Category:French_terms_with_homophones">Wiktionary's category of French homophones</a> with <a href="https://pypi.org/project/beautifulsoup4/">BeautifulSoup</a> and parsed words URLs entries with <a href="https://pypi.org/project/wiktionaryparser/">WiktionaryParser</a>. Thus, I had successfully extracted meaning from Wiktionary, I just had to create a database and a web application for it.
