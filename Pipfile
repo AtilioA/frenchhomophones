@@ -9,6 +9,7 @@ flask-pymongo = "*"
 python-dotenv = "*"
 wiktionaryparser = "*"
 pymongo = {extras = ["srv"],version = "*"}
+gunicorn = "*"
 
 [dev-packages]
 
