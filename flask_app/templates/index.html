@@ -32,10 +32,63 @@ French Homophones
     </div>
 </section>
 {% endblock %}
-<!-- 
+
 {% block head %}
 <h1>TESTE</h1>
-{% endblock %} -->
+{% endblock %}
 
 <div class="center">
+    {% block homophone %}
+    <h1>{{ homophone.word }} ({{ homophone.partOfSpeech }})</h1>
+
+    {% if homophone.ipa %}
+    {{ homophone.ipa }}
+    {% else %}
+    No IPA available.
+    {% endif %}
+    <br />
+
+    {% if homophone.audio %}
+    <audio src="{{homophone.audio}}" controls></audio>
+    {% else %}
+    No audio available.
+    {% endif %}
+    <br />
+
+    <br />
+    Word's definitions:
+    <br />
+    {% for definition in homophone.wordDefinitions %}
+    <h2>- {{ definition }}</h2>
+    {% endfor %}
+    <br />
+
+    {% if homophone.root %}
+        Word's root ({{homophone.root[0]["definitions"][0]["text"][0]}}) definitions:
+        <br />
+        {% for rootDefinition in homophone.root[0]["definitions"][0]["text"][1:] %}
+        - {{rootDefinition}}
+        <br />
+        {% endfor %}
+        <br />
+    {% endif %}
+
+    <br />
+    Sentence examples:
+    <br />
+
+    {% for example in homophone.sentenceExamples %}
+    - {{ example }}
+    <br />
+    {% endfor %}
+
+    <br />
+    Homophones:
+    <br />
+    {% for homophones in homophone.homophones %}
+    {{ homophones }}
+    <br />
+    {% endfor %}
+
+    {% endblock %}
 </div>
