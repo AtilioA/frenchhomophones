@@ -126,5 +126,5 @@ instance/*
 
 django_project/
 .env
-homophones.txt
+homophones*.txt
 mybulma

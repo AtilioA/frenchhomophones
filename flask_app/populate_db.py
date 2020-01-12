@@ -1,43 +1,52 @@
 import re
-import json 
 
+# To get structured data form Wiktionary
 from wiktionaryparser import WiktionaryParser
 parser = WiktionaryParser()
+
+# To read dictionaries from txt
 from ast import literal_eval
 
-from flask import Blueprint, render_template, url_for
-
+# MongoDB
 from flask_pymongo import PyMongo 
 from pymongo import MongoClient
-mongo = PyMongo()
-connection = MongoClient()
-
-main = Blueprint('main', __name__)
-
 
 def populate_db():
+    """ Insert information from homophones.txt in the database """
+    # Connect to database
     client = MongoClient('mongodb+srv://atilioa:obBpW3F0j8rQy@cluster0-iqyn6.gcp.mongodb.net/test?retryWrites=true&w=majority')
-    db = client.test
-    homophones = db.homophones
+    db = client.homophones
+    homophonesCollection = db.homophones
     print("Connected to database.")
 
     with open("homophones.txt", "r+", encoding="utf8") as f:
-        listDict = []
+        # Read .txt and append entries (as dictionaries) to list
+        dictList = []
         for line in f:
-            your_dict = literal_eval(line)
-            listDict.append(your_dict)
+            wordDict = literal_eval(line)
+            dictList.append(wordDict)
 
-        inserted = db.homophones.insert_many(listDict)
+        # Insert whole list of dictionaries in one call
+        insertedResult = homophonesCollection.insert_many(dictList)
 
-        print(f"\n{len(inserted)} documents inserted.\n")
+        print(f"{len(insertedResult.inserted_ids)} documents inserted.")
 
 
 def request_wiktionary():
+    """ Read french_homophones.txt to request words' informations with WiktionaryParser
+        Write relevant structured information to homophones.txt
+    """
+
     with open("french_homophones.txt", "r+", encoding="utf8") as fHomophones:
         with open("homophones.txt", "a+", encoding="utf8") as fOut:
+            # Lines of french_homophones will go to a list
             words = fHomophones.readlines()
+            # TODO: examine this:
+            # Ignore first three words (for some reason they'll throw exceptions)
             for word in words[3:]:
                 parsedHomophone = parser.fetch(word.strip(), "french")
+
+                # Treat each information accordingly
                 try:
                     ipaHomophones = parsedHomophone[0]["pronunciations"]['text']
                     if len(ipaHomophones) > 1:  # Has IPA and homophones
@@ -50,6 +59,7 @@ def request_wiktionary():
                     
                     wordDefinitions = parsedHomophone[0]["definitions"][0]["text"][1:]
                     try:
+                        # Try to find "root" of word, as in "word = abadaient -> root = abader"
                         match = re.search(r"of (\w+):?$", str(wordDefinitions[0].strip()))
                         root = match.group(1)
                         # root = parser.fetch(match.group(1).strip(), "french")
@@ -70,6 +80,7 @@ def request_wiktionary():
                         audio = parsedHomophone[0]["pronunciations"]['audio']
                     
                     pronunciations = parsedHomophone[0]["pronunciations"]
+
                     homophone = {
                     'word': parsedHomophone[0]["definitions"][0]["text"][0],
                     'partOfSpeech': parsedHomophone[0]["definitions"][0]["partOfSpeech"],
@@ -81,6 +92,7 @@ def request_wiktionary():
                     'root': root
                     }
                     print(homophone)
+                    
                     fOut.write(f"{homophone}\n")
                 except:
                     pass

@@ -36,7 +36,7 @@ def index():
 
     # For querying the database through the website
     if request.method == 'POST':
-        word_query = request.form.get('word').strip()
+        word_query = request.form.get('word').strip().lower()
         cursor = user_collection.find({"word": word_query})
         try:
             homophone = list(cursor)[0]
