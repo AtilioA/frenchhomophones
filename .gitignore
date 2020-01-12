@@ -129,3 +129,4 @@ django_project/
 homophones*.txt
 *ignore.txt
 mybulma
+node_modules/

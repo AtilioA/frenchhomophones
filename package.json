@@ -1,0 +1,24 @@
+{
+  "name": "frenchhomophones",
+  "version": "1.0.0",
+  "description": "This is a small Flask web application I built during 2019-2020 summer vacation.\r My inspiration was <a href=\"https://www.homophone.com/\">this website</a>, which showed me interesting English homophones from time to time; I still use it as my homepage (on random).",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AtilioA/wiktionary-french-homophones.git"
+  },
+  "author": "AtilioA",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AtilioA/wiktionary-french-homophones/issues"
+  },
+  "homepage": "https://github.com/AtilioA/wiktionary-french-homophones#readme",
+  "dependencies": {
+    "bootstrap": "^4.4.1",
+    "jquery": "^3.4.1",
+    "popper.js": "^1.16.0"
+  }
+}
