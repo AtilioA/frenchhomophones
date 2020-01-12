@@ -127,4 +127,5 @@ instance/*
 django_project/
 .env
 homophones*.txt
+*ignore.txt
 mybulma
