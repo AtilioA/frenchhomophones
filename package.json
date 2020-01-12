@@ -1,7 +1,7 @@
 {
   "name": "frenchhomophones",
   "version": "1.0.0",
-  "description": "This is a small Flask web application I built during 2019-2020 summer vacation.\r My inspiration was <a href=\"https://www.homophone.com/\">this website</a>, which showed me interesting English homophones from time to time; I still use it as my homepage (on random).",
+  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

@@ -125,8 +125,25 @@ instance/*
 .webassets-cache
 
 django_project/
-.env
 homophones*.txt
 *ignore.txt
 mybulma
 node_modules/
+
+# virtualenv
+.Python
+pyvenv.cfg
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+pip-selfcheck.json
+
+### Sass ###
+.sass-cache/
+*.css.map
+*.sass.map
+*.scss.map
