@@ -1,50 +1,44 @@
 @import url("https://fonts.googleapis.com/css?family=Roboto");
+
 body {
-  background: #fdfdfd;
-  font-family: "Roboto";
-  padding-top: 4.5rem;
+    background: #fdfdfd;
+    font-family: "Roboto";
+}
+
+#app {
+    padding-top: 4.5rem;
+    display: flex;
+    min-height: 100vh !important;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .navbar {
-  background-color: #1C3337;
-}
-
-.abs-center-x {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
+    background-color: #1C3337;
 }
 
 .navbar-inner {
-  text-align: center;
+    text-align: center;
 }
 
 input.form-control {
-  background-color: #e6e6e6;
-}
-
-.footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  height: 60px;
-  line-height: 60px;
-  background-color: #f1f1f1;
+    background-color: #e6e6e6;
 }
 
 .form-inline {
-  width: 100%;
-  display: flex;
-  justify-content: center;
+    width: 100%;
+    display: flex;
+    justify-content: center;
 }
 
 .form-inline #search {
-  width: 50%;
+    width: 50%;
 }
 
-.dropdown-item.active, .dropdown-item:active {
-  color: #fafafa;
-  background-color: #2ab13c;
+.dropdown-item.active,
+.dropdown-item:active {
+    color: #fafafa;
+    background-color: #2ab13c;
 }
 
 /*# sourceMappingURL=style.css.map */

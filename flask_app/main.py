@@ -1,12 +1,8 @@
 import random
 from .extensions import mongo
+from .fetch_wiktionary_word import fetch_wiktionary_word
 
 from flask import Blueprint, render_template, url_for, request
-# from wiktionaryparser import WiktionaryParser
-# Initialize parser
-# parser = WiktionaryParser()
-
-from .fetch_wiktionary_word import fetch_wiktionary_word
 
 main = Blueprint('main', __name__)
 
@@ -73,11 +69,20 @@ def random():
     user_collection = mongo.db.homophones
 
     homophone = find_random_document(user_collection)[0]
-    # print(homophone)
+    try:
+        root = homophone["root"].strip()
+        print(f"\n\nFetching root: {root}")
+        dictRoot = fetch_wiktionary_word(root)
+        print(f"Root dictionary: {dictRoot}")
+        homophone["rootWord"] = dictRoot
+        # print(homophone)
+    except:
+        pass
     homophonesList = [homophone]
-    for homophone in homophone["homophones"]:
-        print(f"Querying {homophone.strip()}...")
-        wordQueryResult = list(user_collection.find({"word": homophone.strip()}))
+
+    for otherHomophone in homophone["homophones"]:
+        print(f"Querying {otherHomophone.strip()}...")
+        wordQueryResult = list(user_collection.find({"word": otherHomophone.strip()}))
         print(f"query: {wordQueryResult}")
         # print(f"list: {list(wordQueryResult)}")
 
@@ -91,7 +96,7 @@ def random():
         else:
             try:
                 root = wordQueryResult[0]["root"].strip()
-                print(f"Fetching root: {root}")
+                print(f"\n\nFetching root: {root}")
                 dictRoot = fetch_wiktionary_word(root)
                 print(f"Root dictionary: {dictRoot}")
                 wordQueryResult[0]["rootWord"] = dictRoot
@@ -100,7 +105,7 @@ def random():
                 pass
             homophonesList.append(wordQueryResult[0])
 
-    return render_template("index.html", homophones=homophonesList)
+    return render_template("homophones.html", homophones=homophonesList)
 
 
 

@@ -22,7 +22,7 @@
 <body class="d-flex flex-column">
     <div class="wrapper">
         <nav class="navbar navbar-expand-md navbar-dark fixed-top">
-            <a class="navbar-brand" href="#">French Homophones</a>
+            <a class="navbar-brand" href="https://frenchhomophones.herokuapp.com/">French Homophones</a>
 
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSite">
                 <span class="navbar-toggler-icon"></span>
@@ -51,7 +51,7 @@
                             <div class="dropdown-menu dropdown-menu-right shadow rounded"
                                 aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="#">What are homophones?</a>
-                                <a class="dropdown-item" href="#">About the website</a>
+                                <a class="dropdown-item" href="https://frenchhomophones.herokuapp.com//about">About the website</a>
                             </div>
                         </li>
                     </ul>
@@ -63,51 +63,10 @@
         <div class="container body-content">
             <div class="container">
                 <div class="text my-4">
-                    <h3><b>{% block homophones_h3 %}{% endblock %}</b></h3>
-                    <h5>{% block homophones_h5 %}{% endblock %} have the same pronunciation but different meanings,
-                        therefore they're homophones of the French language.</h5>
+                    {% block body_container_text %}{% endblock %}
+
                 </div>
 
-                <!-- Homophones' cards -->
-                <div class="row my-2">
-                    {% for word in homophones %}
-                    <div class="col-sm-12 col-md-6 my-2">
-                        <div class="card shadow-sm">
-                            <div class="card-body">
-                                {% if word.ipa %}
-                                <h4 class="card-title"><b>{{word.word}}</b> ({{word.partOfSpeech}}) | {{word.ipa}}</h4>
-                                {% else %}
-                                <h4 class="card-title"><b>{{word.word}}</b> ({{word.partOfSpeech}})</h4>
-                                {% endif %}
-                                {% if word.audio %}
-                                <audio src="{{word.audio}}" controls></audio>
-                                {% endif %}
-                                {% for definition in word.wordDefinitions %}
-                                <p class="card-text"><b>{{ loop.index }}.:</b> {{definition}}</p>
-                                {% endfor %}
-                            </div>
-                            {% if word.rootWord %}
-                                <hr>
-                                <div class="container">
-                                    {% if word.rootWord.ipa %}
-                                    <h6 class="card-title">Root <i>[experimental]</i>: <b>{{word.rootWord.word}}</b> ({{word.rootWord.partOfSpeech}}) | {{word.ipa}}</h6>
-                                    {% else %}
-                                    <h6 class="card-title">Root <i>[experimental]</i>: <b>{{word.rootWord.word}}</b> ({{word.rootWord.partOfSpeech}})</h6>
-                                    {% endif %}
-                                    {% for definition in word.rootWord.wordDefinitions %}
-                                    <p class="card-text"><b>{{ loop.index }}.:</b> {{definition}}</p>
-                                    {% endfor %}
-                                </div>
-                            {% endif %}
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-                <div class="text my-4">
-                    <i>
-                        <p>Definitions from Wiktionary, Creative Commons Attribution/Share-Alike License.</p>
-                    </i>
-                </div>
             </div>
         </div>
         <!-- </div> -->

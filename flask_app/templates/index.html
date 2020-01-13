@@ -1,25 +1,15 @@
-{% extends 'base.html' %}
+{% extends 'base_index.html' %}
 
 {% block title_title %}
 French Homophones
 {% endblock %}
 
-{% block homophones_h3 %}
-    {% for word in homophones %}
-        {% if loop.last %}
-        {{ word.word }}
-        {% else %}
-        {{ word.word }},
-        {% endif %}
-    {% endfor %}
-{% endblock %}
-
-{% block homophones_h5 %}
-    {% for word in homophones %}
-        {% if loop.last %}
-        and {{ word.word }}
-        {% else %}
-        {{ word.word }},
-        {% endif %}
-    {% endfor %}
+{% block body_container_text %}
+    <h3>Hello, World!</h3>
+    
+    <div class="text my-4">
+        <i>
+            <p>Definitions from Wiktionary, Creative Commons Attribution/Share-Alike License.</p>
+        </i>
+    </div>
 {% endblock %}

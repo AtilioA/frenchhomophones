@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="../static/assets/style.css">
+
+    <!-- Font Awesome icons -->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <title>
+        {% block title_title %}{% endblock %}
+    </title>
+</head>
+
+<body class="">
+    <header>
+        <nav class="navbar navbar-expand-md navbar-dark fixed-top">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">French Homophones</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSite">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="navbar-collapse collapse w-100" id="navbarSite">
+                    <a href="#" class="btn btn-success btn-sm my-lg-0 my-sm-2 my-2">
+                        Random
+                        <span class="fa fa-random randomIcon"></span>
+                    </a>
+
+                    <div class="d-inline-flex p-2 bd-highlight justify-content-center text-nowrap ml-auto">
+                        <form class="form-inline my-2 my-lg-0 ml-auto">
+                            <input class="form-control mr-sm-2 my-lg-0 my-sm-2 my-2" type="search" placeholder="Word"
+                                aria-label="Search">
+                            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search homophone</button>
+                        </form>
+                    </div>
+
+                    <div class="navbar">
+                        <ul class="navbar-nav ml-auto my-lg-0 my-sm-0 my-0">
+                            <!-- About dropdown -->
+                            <li class="nav-item dropdown ml-auto">
+                                <a class="nav-link dropdown-toggle" href="#" id="dropdownSite" role="button"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> About </a>
+                                <div class="dropdown-menu dropdown-menu-right shadow rounded"
+                                    aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="#">What are homophones?</a>
+                                    <a class="dropdown-item" href="#">About the website</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div id="app">
+        <div class="homophones">
+            <div class="container body-content">
+                <div class="container">
+                    <div class="text my-4">
+                        <h3><b>{% block homophones_h3 %}{% endblock %}</b></h3>
+                        <h5>{% block homophones_h5 %}{% endblock %} have the same pronunciation but different meanings,
+                            therefore they're homophones of the French language.</h5>
+                    </div>
+
+                    <!-- Homophones' cards -->
+                    <div class="row my-2">
+                        {% for word in homophones %}
+                        <div class="col-sm-12 col-md-6 my-2">
+                            <div class="card shadow-sm">
+                                <div class="card-body">
+                                    {% if word.ipa %}
+                                    <h4 class="card-title"><b>{{word.word}}</b> ({{word.partOfSpeech}}) | {{word.ipa}}
+                                    </h4>
+                                    {% else %}
+                                    <h4 class="card-title"><b>{{word.word}}</b> ({{word.partOfSpeech}})</h4>
+                                    {% endif %}
+                                    {% if word.audio %}
+                                    <audio src="{{word.audio}}" controls></audio>
+                                    {% endif %}
+                                    {% for definition in word.wordDefinitions %}
+                                    <p class="card-text"><b>{{ loop.index }}.:</b> {{definition}}</p>
+                                    {% endfor %}
+                                    {% if word.rootWord %}
+                                    <hr>
+                                    <div class="container">
+                                        {% if word.rootWord.ipa %}
+                                        <h6 class="card-title">Root <i>[experimental]</i>: <b>{{word.rootWord.word}}</b>
+                                            ({{word.rootWord.partOfSpeech}}) | {{word.ipa}}</h6>
+                                        {% else %}
+                                        <h6 class="card-title">Root <i>[experimental]</i>: <b>{{word.rootWord.word}}</b>
+                                            ({{word.rootWord.partOfSpeech}})</h6>
+                                        {% endif %}
+                                        {% for definition in word.rootWord.wordDefinitions %}
+                                        <p class="card-text"><b>{{ loop.index }}.:</b> {{definition}}</p>
+                                        {% endfor %}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="text my-4">
+                        <i>
+                            <p>Definitions from Wiktionary, Creative Commons Attribution/Share-Alike License.</p>
+                        </i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <footer id="footer" class="py-3 bg-dark text-white-50">
+            <div class="container body-content">
+                <div class="container">
+                    <span class="text-muted">Built by <a target="_blank"
+                            href="https://github.com/AtilioA">AtilioA</a>.</span>
+                </div>
+            </div>
+        </footer>
+
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+            integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+            crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+            integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+            crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+            integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+            crossorigin="anonymous"></script>
+    </div>
+</body>
+
+</html>
