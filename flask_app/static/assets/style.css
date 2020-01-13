@@ -9,13 +9,10 @@ body {
   background-color: #1C3337;
 }
 
-.search-container {
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.dropdown-menu {
-  right: 0;
+.abs-center-x {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .navbar-inner {
@@ -33,6 +30,21 @@ input.form-control {
   height: 60px;
   line-height: 60px;
   background-color: #f1f1f1;
+}
+
+.form-inline {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.form-inline #search {
+  width: 50%;
+}
+
+.dropdown-item.active, .dropdown-item:active {
+  color: #fafafa;
+  background-color: #2ab13c;
 }
 
 /*# sourceMappingURL=style.css.map */
