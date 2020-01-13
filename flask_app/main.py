@@ -3,8 +3,13 @@ from .extensions import mongo
 from .fetch_wiktionary_word import fetch_wiktionary_word
 
 from flask import Blueprint, render_template, url_for, request
+from flask_wtf import FlaskForm
+from wtforms import StringField
 
 main = Blueprint('main', __name__)
+
+class SearchForm(FlaskForm):
+    searchQuery = StringField('searchQuery')
 
 
 def find_document(word):
@@ -29,46 +34,34 @@ def find_random_document(user_collection):
 def index():
     # Connects to database collection. Creates one if it doesn't exist
     user_collection = mongo.db.homophones
-
-    # For querying the database through the website
-    if request.method == 'POST':
-        word_query = request.form.get('word').strip().lower()
-        cursor = user_collection.find({"word": word_query})
-        try:
-            homophone = dict(cursor)
-        except IndexError:  # No entry was found in the database
-            return render_template("notfound.html", word=word_query)
-    else:
-        # Placeholder. Will show random homophones in the index page
-
-        homophone = user_collection.find_one({"word": "faire"})
-        homophonesList = [homophone]
-        # print(homophone)
-        for homophone in homophone["homophones"]:
-            print(f"Querying {homophone.strip()}...")
-            homophonesList.append(user_collection.find(
-                {"word": homophone.strip()}))
-
-        # try:
-        #     # homophonesList = list(map(dict, homophonesList))
-        # except:
-        #     pass
-        # homophonesList = [list(x) for x in homophonesList if homophonesList]
-        print(homophonesList)
-
-    return render_template("index.html", homophones=homophonesList)
+    
+    return render_template("index.html")
 
 
-@main.route('/find')
+@main.route("/find/")
 def find():
+
+    return render_template("index.html")
     pass
 
 
-@main.route('/random')
+@main.route("/random/", methods=['GET', 'POST'])
 def random():
     user_collection = mongo.db.homophones
+    # form = SearchForm()
 
-    homophone = find_random_document(user_collection)[0]
+    if request.method == 'POST':
+        try:
+            print("\n")
+            wordQuery = request.form.get('wordQuery').strip()
+            print(wordQuery)
+            homophone = list(user_collection.find({"word": wordQuery}))[0]
+            print(homophone)
+        except:
+            return render_template("notfound.html", word=wordQuery)
+    else:
+        homophone = find_random_document(user_collection)[0]
+
     try:
         root = homophone["root"].strip()
         print(f"\n\nFetching root: {root}")
@@ -78,8 +71,8 @@ def random():
         # print(homophone)
     except:
         pass
-    homophonesList = [homophone]
 
+    homophonesList = [homophone]
     for otherHomophone in homophone["homophones"]:
         print(f"Querying {otherHomophone.strip()}...")
         wordQueryResult = list(user_collection.find({"word": otherHomophone.strip()}))
@@ -108,7 +101,6 @@ def random():
     return render_template("homophones.html", homophones=homophonesList)
 
 
-
-@main.route("/about/")            
+@main.route("/about/", methods=['GET', 'POST'])            
 def about():
     return render_template("about.html")
