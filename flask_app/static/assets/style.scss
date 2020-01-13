@@ -1,21 +1,40 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto');
 
+$bg-color: #fdfdfd;
+
 body {
+    background: $bg-color;
     font-family: "Roboto";
-    // font-size: 25px;
-    /* font- */
-    // color: #3b3b3b;
+    padding-top: 4.5rem;
+}
+
+.navbar {
+    // 1C3337
+    background-color: #1C3337;
+}
+
+.search-container {
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .dropdown-menu {
     right: 0;
 }
 
+.navbar-inner {
+    text-align: center;
+}
+
+input.form-control {
+    background-color: rgb(230, 230, 230);
+}
+
 .footer {
     position: absolute;
     bottom: 0;
     width: 100%;
-    height: 60px; /* Set the fixed height of the footer here */
-    line-height: 60px; /* Vertically center the text there */
-    background-color: #f5f5f5;
-  }
+    height: 60px;
+    line-height: 60px;
+    background-color: #f1f1f1;
+}
