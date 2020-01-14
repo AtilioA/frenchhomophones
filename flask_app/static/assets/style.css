@@ -23,6 +23,28 @@ body {
     background-color: #1C3337;
 }
 
+.card-img#main {
+    transition: all 1.5s ease;
+    -webkit-filter: blur(50px);
+    /* Chrome, Safari, Opera */
+    filter: blur(50px);
+}
+
+.card#main:hover>*:not(.card-img-overlay) {
+    transition: 0.25s ease;
+    -webkit-filter: blur(0px);
+    /* Chrome, Safari, Opera */
+    filter: blur(0px);
+}
+
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+}
+
+
 input.form-control {
     background-color: #e6e6e6;
 }
@@ -37,16 +59,6 @@ input.form-control {
 .dropdown-item:active {
     color: #fafafa;
     background-color: #2ab13c;
-}
-
-@media(max-width:500px) {
-  .navbar .navbar-brand {float:none;display: inline-block;}
-  .navbar .navbar-nav>.nav-item { float: none; margin-left: .1rem;}
-  .navbar .navbar-nav {float:none !important;}
-  .nav-item{width:100%;text-align:left;} 
-  .navbar-toggler {display: block !important;}
-  .navbar-toggleable-sm.collapse {display:none !important}
-  .navbar-toggleable-sm.collapse.in {display:block !important}
 }
 
 /*# sourceMappingURL=style.css.map */

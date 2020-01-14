@@ -20,7 +20,7 @@
     </title>
 </head>
 
-<body class>
+<body>
     <header>
         <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
             <div class="container-fluid">
@@ -52,7 +52,7 @@
                                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> About </a>
                                 <div class="dropdown-menu dropdown-menu-right shadow rounded"
                                     aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="#">What are homophones?</a>
+                                    <a class="dropdown-item" href="/#whatarehomophones">What are homophones?</a>
                                     <a class="dropdown-item" href="/about">About the website</a>
                                 </div>
                             </li>
@@ -94,11 +94,11 @@
                                     <hr>
                                     <div id="card-infinitive" class="container">
                                         {% if word.rootWord.ipa %}
-                                        <h6 class="card-title">Infinitive<sup>†</sup>: <b>{{word.rootWord.word}}</b>
-                                            ({{word.rootWord.partOfSpeech}}) | {{word.ipa}}</h6>
+                                        <h6 class="card-title">Infinitive<sup>†</sup>: <b>{{word.rootWord.word}}</b> |
+                                            {{word.ipa}}</h6>
                                         {% else %}
                                         <h6 class="card-title">Infinitive<sup>†</sup>: <b>{{word.rootWord.word}}</b>
-                                            ({{word.rootWord.partOfSpeech}})</h6>
+                                        </h6>
                                         {% endif %}
                                         {% for definition in word.rootWord.wordDefinitions %}
                                         <p class="card-text"><b>{{ loop.index }}.:</b> {{definition}}</p>
@@ -113,16 +113,16 @@
 
                     <hr>
 
-                    <div class="row my">
+                    <div class="row my-2">
                         <div class="col-sm-12 col-md-12 my-2">
                             <div class="card shadow-sm">
                                 <div class="card-body">
                                     <h4 class="card-title">What are homophones?<sup>1</sup></h4>
-                                    <h5>"Homophone" derives from the Greek <i>homo-</i>, "same", and <i>phōnḗ</i>,
-                                        "voice", "utterance".<h5>
-                                            <h5>A homophone is a word that is pronounced the same (to varying extent) as
+                                    <h6>"Homophone" derives from the Greek <i>homo-</i>, "same", and <i>phōnḗ</i>,
+                                        "voice", "utterance".<h6>
+                                            <h6>A homophone is a word that is pronounced the same (to varying extent) as
                                                 another word but differs in meaning. A homophone may also differ in
-                                                spelling.</h5>
+                                                spelling.</h6>
                                 </div>
                             </div>
                         </div>
