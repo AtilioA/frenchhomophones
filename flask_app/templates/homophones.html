@@ -1,0 +1,25 @@
+{% extends 'base_homophones.html' %}
+
+{% block title %}
+French Homophones
+{% endblock %}
+
+{% block homophones_h3 %}
+    {% for word in homophones %}
+        {% if loop.last %}
+        {{ word.word }}
+        {% else %}
+        {{ word.word }},
+        {% endif %}
+    {% endfor %}
+{% endblock %}
+
+{% block homophones_h5 %}
+    {% for word in homophones %}
+        {% if loop.last %}
+        and {{ word.word }}
+        {% else %}
+        {{ word.word }},
+        {% endif %}
+    {% endfor %}
+{% endblock %}

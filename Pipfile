@@ -10,6 +10,7 @@ python-dotenv = "*"
 wiktionaryparser = "*"
 pymongo = {extras = ["srv"],version = "*"}
 gunicorn = "*"
+flask-wtf = "*"
 
 [dev-packages]
 

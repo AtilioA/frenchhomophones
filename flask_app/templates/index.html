@@ -1,84 +1,15 @@
-{% extends 'base.html' %}
-
-{% block title_title %}
-French Homophones
-{% endblock %}
+{% extends 'base_index.html' %}
 
 {% block title %}
 French Homophones
 {% endblock %}
 
-{% block search %}
-<section class="section">
-    <div class="container">
-        <div class="columns">
-            <div class="column is-offset-4 is-4">
-                <form method="POST">
-                    <div class="field has-addons">
-                        <div class="control is-expanded">
-                            <input class="input" name="word" type="text" placeholder="Word">
-                        </div>
-                        <div class="control">
-                            <button class="button is-info">
-                                Search homophone
-                            </button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
+{% block body_content_text %}
+    <h3>Hello, World!</h3>
+    
+    <div class="text my-4">
+        <i>
+            <p>Definitions from Wiktionary, Creative Commons Attribution/Share-Alike License.</p>
+        </i>
     </div>
-</section>
 {% endblock %}
-
-{% block head %}
-{% endblock %}
-
-<div class="center">
-    {% block homophone %}
-    <h1>{{ homophone.word }} ({{ homophone.partOfSpeech }})</h1>
-
-    {% if homophone.ipa %}
-    {{ homophone.ipa }}
-    {% else %}
-    No IPA available.
-    {% endif %}
-    <br />
-
-    {% if homophone.audio %}
-    <audio src="{{homophone.audio}}" controls></audio>
-    {% else %}
-    No audio available.
-    {% endif %}
-    <br />
-
-    {% if homophone.wordDefinitions %}
-        <br />
-        Word's definitions:
-        <br />
-        {% for definition in homophone.wordDefinitions %}
-        <h2>- {{ definition }}</h2>
-        {% endfor %}
-        <br />
-    {% endif %}
-
-    {% if homophone.sentenceExamples %}
-        Sentence examples:
-        <br />
-
-        {% for example in homophone.sentenceExamples %}
-        - {{ example }}
-        {% endfor %}
-        <br />
-    {% endif %}
-
-    <br />
-    Homophones:
-    <br />
-    {% for homophones in homophone.homophones %}
-    {{ homophones }}
-    <br />
-    {% endfor %}
-
-    {% endblock %}
-</div>
