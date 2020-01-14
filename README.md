@@ -1,4 +1,4 @@
-## frenchhomophones
+## [frenchhomophones.tech](http://www.frenchhomophones.tech)
 
 This is a small Flask web application I built during 2019-2020 summer vacation.
 My inspiration was <a href="https://www.homophone.com/">this website</a>, which showed me interesting English homophones from time to time; I still use it as my homepage (on random).
