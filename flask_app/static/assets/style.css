@@ -14,12 +14,13 @@ body {
     justify-content: space-between;
 }
 
-.navbar {
-    background-color: #1C3337;
+#card-infinitive {
+    color: #343434;
+    font-size: smaller;
 }
 
-.navbar-inner {
-    text-align: center;
+.navbar {
+    background-color: #1C3337;
 }
 
 input.form-control {
@@ -32,14 +33,20 @@ input.form-control {
     justify-content: center;
 }
 
-.form-inline #search {
-    width: 50%;
-}
-
 .dropdown-item.active,
 .dropdown-item:active {
     color: #fafafa;
     background-color: #2ab13c;
+}
+
+@media(max-width:500px) {
+  .navbar .navbar-brand {float:none;display: inline-block;}
+  .navbar .navbar-nav>.nav-item { float: none; margin-left: .1rem;}
+  .navbar .navbar-nav {float:none !important;}
+  .nav-item{width:100%;text-align:left;} 
+  .navbar-toggler {display: block !important;}
+  .navbar-toggleable-sm.collapse {display:none !important}
+  .navbar-toggleable-sm.collapse.in {display:block !important}
 }
 
 /*# sourceMappingURL=style.css.map */

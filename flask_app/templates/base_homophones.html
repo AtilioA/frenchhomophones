@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="../static/assets/style.css">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
 
     <!-- Font Awesome icons -->
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
@@ -21,10 +22,10 @@
 
 <body class>
     <header>
-        <nav class="navbar navbar-expand-md navbar-dark fixed-top">
+        <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
             <div class="container-fluid">
                 <a class="navbar-brand" href="/">French Homophones</a>
-                <a href="/random" class="btn btn-success btn-sm my-lg-0">
+                <a href="/random" class="btn btn-success btn-sm my-lg-0 mx-lg-0 mx-0 mx-sm-0">
                     Random
                     <span class="fa fa-random randomIcon"></span>
                 </a>
@@ -33,20 +34,20 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
-                <div class="navbar-collapse collapse w-100" id="navbarSite">
-
+                <div class="navbar-collapse collapse" id="navbarSite">
                     <div class="d-inline-flex bd-highlight justify-content-center text-nowrap ml-auto mr-2">
-                        <form class="form-inline my-0 my-lg-0 my-sm-0 ml-auto" method="POST">
-                            <input class="form-control mr-sm-1 my-lg-0 my-sm-0 my-2" name="wordQuery" type="search" placeholder="Word"
-                                aria-label="Search">
-                            <button class="btn btn-outline-success my-0 my-sm-0" type="submit">Search homophone</button>
+                        <form class="form-inline my-0 my-lg-0 mt-2 my-lg-0 ml-auto" method="POST">
+                            <input class="form-control mr-sm-1 my-lg-0 my-sm-0 my-2" name="wordQuery" type="search"
+                                placeholder="Word" aria-label="Search">
+                            <button class="btn btn-outline-success my-lg-0 mx-md-0" type="submit">Search
+                                homophone</button>
                         </form>
                     </div>
 
-                    <div class="navbar">
-                        <ul class="navbar-nav my-lg-0 my-sm-0 my-0">
+                    <div class="dropdown" id="navbarNavDropdown">
+                        <ul class="navbar-nav my-lg-0 mt-2 my-0 ml-lg-3">
                             <!-- About dropdown -->
-                            <li class="nav-item dropdown ml-auto">
+                            <li class="nav-item dropdown ml-xs-auto">
                                 <a class="nav-link dropdown-toggle" href="#" id="dropdownSite" role="button"
                                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> About </a>
                                 <div class="dropdown-menu dropdown-menu-right shadow rounded"
@@ -58,7 +59,6 @@
                         </ul>
                     </div>
                 </div>
-            </div>
         </nav>
     </header>
 
@@ -92,12 +92,12 @@
                                     {% endfor %}
                                     {% if word.rootWord %}
                                     <hr>
-                                    <div class="container">
+                                    <div id="card-infinitive" class="container">
                                         {% if word.rootWord.ipa %}
-                                        <h6 class="card-title">Root <i>[experimental]</i>: <b>{{word.rootWord.word}}</b>
+                                        <h6 class="card-title">Infinitive<sup>†</sup>: <b>{{word.rootWord.word}}</b>
                                             ({{word.rootWord.partOfSpeech}}) | {{word.ipa}}</h6>
                                         {% else %}
-                                        <h6 class="card-title">Root <i>[experimental]</i>: <b>{{word.rootWord.word}}</b>
+                                        <h6 class="card-title">Infinitive<sup>†</sup>: <b>{{word.rootWord.word}}</b>
                                             ({{word.rootWord.partOfSpeech}})</h6>
                                         {% endif %}
                                         {% for definition in word.rootWord.wordDefinitions %}
@@ -110,11 +110,32 @@
                         </div>
                         {% endfor %}
                     </div>
+
+                    <hr>
+
+                    <div class="row my">
+                        <div class="col-sm-12 col-md-12 my-2">
+                            <div class="card shadow-sm">
+                                <div class="card-body">
+                                    <h4 class="card-title">What are homophones?<sup>1</sup></h4>
+                                    <h5>"Homophone" derives from the Greek <i>homo-</i>, "same", and <i>phōnḗ</i>,
+                                        "voice", "utterance".<h5>
+                                            <h5>A homophone is a word that is pronounced the same (to varying extent) as
+                                                another word but differs in meaning. A homophone may also differ in
+                                                spelling.</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="text my-4">
                         <i>
-                            <p>Definitions from Wiktionary, Creative Commons Attribution/Share-Alike License.</p>
+                            <h6>Definitions from Wiktionary, Creative Commons Attribution/Share-Alike License.</h6>
+                            <h6><sup>†</sup>May not be accurate.</h6>
+                            <h6><sup>1</sup><a href="https://en.wikipedia.org/wiki/Homophone">Wikipedia</a>.</h6>
                         </i>
                     </div>
+
                 </div>
             </div>
         </div>
