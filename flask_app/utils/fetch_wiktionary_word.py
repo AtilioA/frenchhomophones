@@ -3,10 +3,9 @@ parser = WiktionaryParser()
 
 
 def fetch_wiktionary_word(word):
-    """ Read french_homophones.txt to request words' informations with WiktionaryParser
-        Write relevant structured information to homophones.txt
-    """
-    
+    """ Extract word's information with WiktionaryParser """
+
+    # print("I'm being executed.")
     parsedHomophone = parser.fetch(word.strip(), "french")
 
     # Treat each information accordingly

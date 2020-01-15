@@ -1,6 +1,6 @@
 import re
 
-# To get structured data form Wiktionary
+# To get structured data from Wiktionary
 from wiktionaryparser import WiktionaryParser
 parser = WiktionaryParser()
 
@@ -13,9 +13,10 @@ from pymongo import MongoClient
 
 def populate_db():
     """ Insert information from homophones.txt in the database """
+
     # Connect to database
-    client = MongoClient('mongodb+srv://atilioa:obBpW3F0j8rQy@cluster0-iqyn6.gcp.mongodb.net/test?retryWrites=true&w=majority')
-    db = client.homophones
+    client = MongoClient('.')
+    db = client.frenchhomophones
     homophonesCollection = db.homophones
     print("Connected to database.")
 
