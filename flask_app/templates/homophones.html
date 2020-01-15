@@ -1,7 +1,13 @@
 {% extends 'base_homophones.html' %}
 
 {% block title %}
-French Homophones
+{% for word in homophones %}
+{% if loop.last %}
+{{ word.word }}
+{% else %}
+{{ word.word }},
+{% endif %}
+{% endfor %}
 {% endblock %}
 
 {% block homophones_h3 %}
@@ -12,6 +18,8 @@ French Homophones
         {{ word.word }},
         {% endif %}
     {% endfor %}
+    <br />
+    <audio src="{{audio}}" controls type="audio"></audio>
 {% endblock %}
 
 {% block homophones_h5 %}

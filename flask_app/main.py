@@ -1,208 +1,149 @@
 import random
 from .extensions import mongo
-from .fetch_wiktionary_word import fetch_wiktionary_word
+from .utils.fetch_wiktionary_word import fetch_wiktionary_word
 
 from flask import Blueprint, render_template, url_for, request
-from flask_wtf import FlaskForm
-from wtforms import StringField
+# from flask_wtf import FlaskForm
+# from wtforms import StringField
 
 main = Blueprint('main', __name__)
 
-class SearchForm(FlaskForm):
-    searchQuery = StringField('searchQuery')
 
+def find_one_random_document(user_collection):
+    """ Returns random noun homophone from the database. """
 
-def find_document(word):
-    user_collection = mongo.db.users
-
-    query = {"word": word}
-    doc = user_collection.find_one(query)
-
-    print(doc)
-    return doc
-
-
-def find_random_document(user_collection):
-    """ Returns random homophone from the database """
-    cursor = user_collection.aggregate([
-        {"$sample": {"size": 1}}
+    cursor = user_collection.aggregate(
+    [
+        {"$match": { "partOfSpeech": "noun" } },
+        {"$sample": {"size": 1 } }
     ])
-    return list(cursor)
+
+    return list(cursor)[0]
 
 
-@main.route('/', methods=['GET', 'POST'])
-def index():
+def determine_audio_URL_homophones(homophonesList):
+    """ Returns audio URL for list of homophones.
+
+        Returns first audio file from Wiktionary from the list of homophones.
+
+        If no audio is available, requests from google translate
+        (Request URL may break anytime).
+    """
+
+    # Find any audio file from list of homophones
+    # If not available, get from Google Translate (this URL may break anytime)
+    audio = f"//translate.google.com.vn/translate_tts?ie=&q={homophonesList[0]['word']}&tl=fr-fr&client=tw-ob"
+    for homophone in homophonesList:
+        if homophone["audio"]:
+            audio = homophone["audio"]
+            break
+
+    return audio
+
+
+def create_homophones_list(query="", random=False):
+    """ Returns list with queried word (if applicable) and its homophones.
+
+        Until infinitive forms are stored in the database,
+        will look up with WiktionaryParser during execution.
+
+        Optional keyword arguments:
+
+        `random`: will use a random homophone as starting point
+        if `random` is set to True.
+    """
+
     # Connects to database collection. Creates one if it doesn't exist
     user_collection = mongo.db.homophones
 
-    if request.method == 'POST':
-        try:
-            print("\n")
-            wordQuery = request.form.get('wordQuery').strip()
-            print(wordQuery)
-            homophone = list(user_collection.find({"word": wordQuery}))[0]
-            print(homophone)
-        except:
-            return render_template("notfound.html", word=wordQuery)
+    homophonesList = []
 
+    if random:
+        homophone = find_one_random_document(user_collection)
+    else:
+        homophone = user_collection.find_one({"word": query.strip()})
+        if homophone is None:
+            return render_template("notfound.html", word=query)
+
+        # Look for infinitive form if it's a verb
         try:
-            root = homophone["root"].strip()
-            print(f"\n\nFetching root: {root}")
-            dictRoot = fetch_wiktionary_word(root)
-            print(f"Root dictionary: {dictRoot}")
-            homophone["rootWord"] = dictRoot
-            # print(homophone)
+            if homophone["partOfSpeech"] == "verb":
+                root = homophone["root"].strip()
+                print(f"\n\nFetching root: {root}")
+                dictRoot = fetch_wiktionary_word(root)
+                print(f"Root dictionary: {dictRoot}")
+                homophone["rootWord"] = dictRoot
         except:
             pass
 
-        homophonesList = [homophone]
-        for otherHomophone in homophone["homophones"]:
+    # Create list querying all homophones
+    homophonesList.append(homophone)
+    for otherHomophone in homophone["homophones"]:
+        try:
             print(f"Querying {otherHomophone.strip()}...")
-            wordQueryResult = list(user_collection.find({"word": otherHomophone.strip()}))
+            wordQueryResult = user_collection.find_one({"word": otherHomophone.strip()})
             print(f"query: {wordQueryResult}")
-            # print(f"list: {list(wordQueryResult)}")
+        except:
+            wordQueryResult = None
+        
+        # If didn't find in the database, proceed to next iteration
+        if not wordQueryResult:
+            continue
+        else:
 
-            # try:
-            #     # wordQueryResult = list(wordQueryResult)[0]
-            # except:
-            #     pass
-            
-            if not wordQueryResult:
-                continue
-            else:
-                try:
-                    root = wordQueryResult[0]["root"].strip()
+            # Look for infinitive form if it's a verb
+            try:
+                if wordQueryResult["partOfSpeech"] == "verb":
+                    root = wordQueryResult["root"].strip()
                     print(f"\n\nFetching root: {root}")
                     dictRoot = fetch_wiktionary_word(root)
                     print(f"Root dictionary: {dictRoot}")
-                    wordQueryResult[0]["rootWord"] = dictRoot
-                    print(wordQueryResult[0])
-                except:
-                    pass
-                homophonesList.append(wordQueryResult[0])
+                    wordQueryResult["rootWord"] = dictRoot
+                    print(wordQueryResult)
+            except:
+                pass
 
-        return render_template("homophones.html", homophones=homophonesList)
+        homophonesList.append(wordQueryResult)
+
+    return homophonesList
+
+
+@main.route('/', methods=['GET'])
+def index():
+    # Connects to database collection. Creates one if it doesn't exist
+    user_collection = mongo.db.homophones
     
     return render_template("index.html")
 
 
-@main.route("/find/")
+@main.route("/find")
 def find():
-    return render_template("index.html")
-    pass
+    user_collection = mongo.db.homophones
+
+    query = request.args['search'].strip()
+    homophonesList = create_homophones_list(query)
+
+    audio = determine_audio_URL_homophones(homophonesList)
+
+    return render_template("homophones.html", homophones=homophonesList, audio=audio)
 
 
-@main.route("/random/", methods=['GET', 'POST'])
+@main.route("/random/", methods=['GET'])
 def random():
+    # Connects to database collection. Creates one if it doesn't exist    
     user_collection = mongo.db.homophones
-    # form = SearchForm()
+    
+    homophonesList = create_homophones_list(random=True)
+    print(homophonesList)
+    
+    audio = determine_audio_URL_homophones(homophonesList)
 
-    if request.method == 'POST':
-        try:
-            print("\n")
-            wordQuery = request.form.get('wordQuery').strip()
-            print(wordQuery)
-            homophone = list(user_collection.find({"word": wordQuery}))[0]
-            print(homophone)
-        except:
-            return render_template("notfound.html", word=wordQuery)
-    else:
-        homophone = find_random_document(user_collection)[0]
-
-    try:
-        root = homophone["root"].strip()
-        print(f"\n\nFetching root: {root}")
-        dictRoot = fetch_wiktionary_word(root)
-        print(f"Root dictionary: {dictRoot}")
-        homophone["rootWord"] = dictRoot
-        # print(homophone)
-    except:
-        pass
-
-    homophonesList = [homophone]
-    for otherHomophone in homophone["homophones"]:
-        print(f"Querying {otherHomophone.strip()}...")
-        wordQueryResult = list(user_collection.find({"word": otherHomophone.strip()}))
-        print(f"query: {wordQueryResult}")
-        # print(f"list: {list(wordQueryResult)}")
-
-        # try:
-        #     # wordQueryResult = list(wordQueryResult)[0]
-        # except:
-        #     pass
-        
-        if not wordQueryResult:
-            continue
-        else:
-            try:
-                root = wordQueryResult[0]["root"].strip()
-                print(f"\n\nFetching root: {root}")
-                dictRoot = fetch_wiktionary_word(root)
-                print(f"Root dictionary: {dictRoot}")
-                wordQueryResult[0]["rootWord"] = dictRoot
-                print(wordQueryResult[0])
-            except:
-                pass
-            homophonesList.append(wordQueryResult[0])
-
-    return render_template("homophones.html", homophones=homophonesList)
+    return render_template("homophones.html", homophones=homophonesList, audio=audio)
 
 
-@main.route("/about/", methods=['GET', 'POST'])            
+@main.route("/about/", methods=['GET'])            
 def about():
+    # Connects to database collection. Creates one if it doesn't exist    
     user_collection = mongo.db.homophones
-
-    if request.method == 'POST':
-        try:
-            print("\n")
-            wordQuery = request.form.get('wordQuery').strip()
-            print(wordQuery)
-            homophone = list(user_collection.find({"word": wordQuery}))[0]
-            print(homophone)
-        except:
-            return render_template("notfound.html", word=wordQuery)
-
-        try:
-            root = homophone["root"].strip()
-            print(f"\n\nFetching root: {root}")
-            dictRoot = fetch_wiktionary_word(root)
-            print(f"Root dictionary: {dictRoot}")
-            homophone["rootWord"] = dictRoot
-            # print(homophone)
-        except:
-            pass
-
-        homophonesList = [homophone]
-        for otherHomophone in homophone["homophones"]:
-            print(f"Querying {otherHomophone.strip()}...")
-            wordQueryResult = list(user_collection.find({"word": otherHomophone.strip()}))
-            print(f"query: {wordQueryResult}")
-            # print(f"list: {list(wordQueryResult)}")
-
-            # try:
-            #     # wordQueryResult = list(wordQueryResult)[0]
-            # except:
-            #     pass
-            
-            if not wordQueryResult:
-                continue
-            else:
-                try:
-                    root = wordQueryResult[0]["root"].strip()
-                    print(f"\n\nFetching root: {root}")
-                    dictRoot = fetch_wiktionary_word(root)
-                    print(f"Root dictionary: {dictRoot}")
-                    wordQueryResult[0]["rootWord"] = dictRoot
-                    print(wordQueryResult[0])
-                except:
-                    pass
-                homophonesList.append(wordQueryResult[0])
-
-        return render_template("homophones.html", homophones=homophonesList)
             
     return render_template("about.html")
-
-
-@main.route("/timothee/")
-def timothee():
-    return "<h1>Amada??</h1> <script>alert(\"Amada??\")</script>"
