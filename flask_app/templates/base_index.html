@@ -119,6 +119,40 @@
                                                 </p>
                                             </figcaption>
                                         </figure>
+
+                                        <div class="col-sm-12 col-md-12 mt-4 my-2">
+                                            <div class="card shadow-sm">
+                                                <div class="card-header">
+                                                    Homophones examples
+                                                </div>
+                                                <div class="row mx-2 my-2">
+                                                    {% for homophonesList in homophonesLists %}
+                                                    <div class="col-md-12 col-lg-3 my-2">
+                                                        <div class="card shadow-sm text-center">
+                                                            <div class="card-header text-center">
+                                                                <audio id="player{{loop.index0}}"
+                                                                    src="{{audios[loop.index0]}}"></audio>
+                                                                <div>
+                                                                    <a
+                                                                        onclick="document.getElementById('player{{loop.index0}}').play()"><i
+                                                                            class='fa fa-volume-up fa-2x'></i></a>
+                                                                </div>
+                                                            </div>
+                                                            <div class="card-body">
+                                                                <ul class="list-group list-group-flush">
+                                                                    {% for homophone in homophonesList %}
+                                                                    <li class="list-group-item"><b>{{homophone.word}}</b></li>
+                                                                    {% endfor %}
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    {% endfor %}
+
+                                                </div>
+                                            </div>
+
+                                        </div>
                             </div>
                         </div>
                     </div>

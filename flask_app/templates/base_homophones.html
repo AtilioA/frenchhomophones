@@ -96,9 +96,9 @@
                                     <hr>
                                     <div id="card-infinitive" class="container">
                                         {% set ns.hasRoot = True %}
-                                        {% if word.rootWord.ipa != None %}
+                                        {% if word.rootWord.ipa %}
                                         <h6 class="card-title">Infinitive<sup>†</sup>: <b>{{word.rootWord.word}}</b> |
-                                            {{word.ipa}}</h6>
+                                            {{word.rootWord.ipa}}</h6>
                                         {% else %}
                                         <h6 class="card-title">Infinitive<sup>†</sup>: <b>{{word.rootWord.word}}</b>
                                         </h6>

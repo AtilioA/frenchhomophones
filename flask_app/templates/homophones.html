@@ -19,7 +19,10 @@
         {% endif %}
     {% endfor %}
     <br />
-    <audio src="{{audio}}" controls type="audio"></audio>
+    <audio id="player" src="{{audio}}" type="audio"></audio>
+    <div>
+        <a onclick="document.getElementById('player').play()"><i class='fa fa-volume-up fa-2x'></i></a>
+    </div>
 {% endblock %}
 
 {% block homophones_h5 %}
