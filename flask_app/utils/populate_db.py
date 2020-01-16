@@ -1,21 +1,36 @@
+import os
 import re
 
+# from __future__ import absolute_import
+# from flask_pymongo import PyMongo
+from pymongo import MongoClient
+# To read dictionaries from txt
+from ast import literal_eval
 # To get structured data from Wiktionary
 from wiktionaryparser import WiktionaryParser
 parser = WiktionaryParser()
 
-# To read dictionaries from txt
-from ast import literal_eval
-
 # MongoDB
-from flask_pymongo import PyMongo 
-from pymongo import MongoClient
+MONGO_URI = os.environ.get("MONGO_URI")
+
+
+def clean_IPA_string(IPAString: str) -> str:
+    """ Clean the IPA string provided by WiktionaryParser.
+
+    Return the cleaned string.
+    """
+
+    return re.sub(r"(?:^.*IPA:.*?(?=/))|'", "", IPAString)
+
 
 def populate_db():
-    """ Insert information from homophones.txt in the database """
+    """ Insert information from homophones.txt in the database.
 
-    # Connect to database
-    client = MongoClient('.')
+    Return the number of inserted documents.
+    """
+    
+    # Connects to database collection. Creates one if it doesn't exist
+    client = MongoClient(MONGO_URI)
     db = client.frenchhomophones
     homophonesCollection = db.homophones
     print("Connected to database.")
@@ -31,73 +46,37 @@ def populate_db():
         insertedResult = homophonesCollection.insert_many(dictList)
 
         print(f"{len(insertedResult.inserted_ids)} documents inserted.")
+        return len(insertedResult.inserted_ids)
 
 
 def request_wiktionary():
-    """ Read french_homophones.txt to request words' informations with WiktionaryParser
-        Write relevant structured information to homophones.txt
+    """ Read french_homophones.txt to request words' informations with WiktionaryParser.
+
+        Write relevant structured information to homophones.txt.
     """
 
-    with open("french_homophones.txt", "r+", encoding="utf8") as fHomophones:
-        with open("homophones.txt", "a+", encoding="utf8") as fOut:
-            # Lines of french_homophones will go to a list
-            words = fHomophones.readlines()
-            # TODO: examine this:
-            # Ignore first three words (for some reason they'll throw exceptions)
-            for word in words[3:]:
-                parsedHomophone = parser.fetch(word.strip(), "french")
+    # with open("french_homophones.txt", "r+", encoding="utf8") as fHomophones:
+    #     with open("homophones.txt", "a+", encoding="utf8") as fOut:
+    #         words = fHomophones.readlines()
+    #         for word in words:
+    #             parsedHomophone = parser.fetch(word.strip(), "french")
 
-                # Treat each information accordingly
-                try:
-                    ipaHomophones = parsedHomophone[0]["pronunciations"]['text']
-                    if len(ipaHomophones) > 1:  # Has IPA and homophones
-                        ipa = ipaHomophones[0]
-                        homophones = ipaHomophones[1]
-                    else:
-                        ipa = None
-                        homophones = ipaHomophones[0]
-                    homophones = homophones[11:].split(',')
-                    
-                    wordDefinitions = parsedHomophone[0]["definitions"][0]["text"][1:]
-                    try:
-                        # Try to find "root" of word, as in "word = abadaient -> root = abader"
-                        match = re.search(r"of (\w+):?$", str(wordDefinitions[0].strip()))
-                        root = match.group(1)
-                        # root = parser.fetch(match.group(1).strip(), "french")
-                    except:
-                        root = None
-                        pass
+    #             homophone = {
+    #                  'word': parsedHomophone[0]["definitions"][0]["text"][0],
+    #                  'partOfSpeech': parsedHomophone[0]["definitions"][0]["partOfSpeech"],
+    #                  'wordDefinitions': parsedHomophone[0]["definitions"][0]["text"][1:],
+    #                  'sentenceExamples': parsedHomophone[0]["definitions"][0]["examples"],
+    #                  'audio': audio,
+    #                  'homophones': homophones,
+    #                  'ipa': ipa,
+    #                  'infinitive': infinitive
+    #             }
+    #             print(homophone)
 
-                    # try:
-                    #     # ipa = re.sub(r".*IPA:\s*", "", ipa)
-                    # except:
-                    #     ipa = None
-
-                    homophones[0] = homophones[0].strip()
-                    
-                    try:
-                        audio = parsedHomophone[0]["pronunciations"]['audio'][0]
-                    except:
-                        audio = parsedHomophone[0]["pronunciations"]['audio']
-                    
-                    pronunciations = parsedHomophone[0]["pronunciations"]
-
-                    homophone = {
-                    'word': parsedHomophone[0]["definitions"][0]["text"][0],
-                    'partOfSpeech': parsedHomophone[0]["definitions"][0]["partOfSpeech"],
-                    'wordDefinitions': parsedHomophone[0]["definitions"][0]["text"][1:],
-                    'sentenceExamples': parsedHomophone[0]["definitions"][0]["examples"],
-                    'audio': audio,
-                    'homophones': homophones,
-                    'ipa': ipa,
-                    'root': root
-                    }
-                    print(homophone)
-                    
-                    fOut.write(f"{homophone}\n")
-                except:
-                    pass
+    #             fOut.write(f"{homophone}\n")
+    pass
 
 
 if __name__ == "__main__":
-    populate_db()
+    # populate_db()
+    pass

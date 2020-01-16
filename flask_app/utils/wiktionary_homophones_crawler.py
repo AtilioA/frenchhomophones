@@ -1,12 +1,8 @@
 import requests
 from bs4 import BeautifulSoup
-from wiktionaryparser import WiktionaryParser
 
-
+# Crawl the Category's pages for all URLs
 if __name__ == "__main__":
-    # Initialize parser
-    parser = WiktionaryParser()
-    
     wiktionaryDomain = "https://en.wiktionary.org"
     targetURL = f"{wiktionaryDomain}/w/index.php?title=Category:French_terms_with_homophones"
     currentPage = 1
@@ -16,7 +12,7 @@ if __name__ == "__main__":
         # Initialize headers for GET request
         headers = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36'}
 
-        # Request to wiktionary
+        # GET Request to wiktionary
         req = requests.get(targetURL, headers=headers)
         # While successful crawling through the links
         while (req.status_code == 200):
@@ -31,8 +27,10 @@ if __name__ == "__main__":
             previousURL = targetURL
             targetURL = f"{wiktionaryDomain}{links[-1]['href']}"
             
+            # The first page doesn't have "Previous page" URL on top and bottom of page
             if currentPage == 1:
                 words = links[1:-1]
+            # The others do; skip those links
             else:
                 words = links[2:-2]
                 
