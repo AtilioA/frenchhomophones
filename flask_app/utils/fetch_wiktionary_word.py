@@ -7,6 +7,7 @@ parser = WiktionaryParser()
 
 from . import populate_db as db
 
+
 def fetch_wiktionary_word(word):
     """ Extract word's information with WiktionaryParser """
 
@@ -26,7 +27,7 @@ def fetch_wiktionary_word(word):
         homophones = ipaHomophones[0]
         homophones = homophones[11:].split(',')
         homophones[0] = homophones[0].strip()
-    except: 
+    except:
         homophones = None
 
     wordDefinitions = parsedHomophone[0]["definitions"][0]["text"][1:]

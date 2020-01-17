@@ -28,7 +28,7 @@ def populate_db():
 
     Return the number of inserted documents.
     """
-    
+
     # Connects to database collection. Creates one if it doesn't exist
     client = MongoClient(MONGO_URI)
     db = client.frenchhomophones

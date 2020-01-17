@@ -1,7 +1,7 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, redirect
 
 # from .extensions import mongo
-from .utils.controllers_utils import determine_audio_URL_homophones, create_homophones_list
+from .utils.controllers_utils import determine_audio_URL_homophones, create_homophones_list, find_nth_document, find_one_random_document
 
 main = Blueprint('main', __name__)
 
@@ -24,30 +24,22 @@ def index():
 
 
 @main.route("/find")
-def find():
-    """ Route that handle query from users. """
+def find(query=""):
+    """ Handle query from users. """
 
     query = request.args['search'].strip().lower()
-
-    homophonesList = create_homophones_list(query)
-    if not homophonesList:
-        return render_template("notfound.html", word=query)
-
-    audio = determine_audio_URL_homophones(homophonesList)
-
-    return render_template("homophones.html", homophones=homophonesList, audio=audio)
+    return redirect(f"/h/{query}")
 
 
 @main.route("/random/", methods=['GET'])
 def random_route():
-    """ Route that retrieves random document from database to be shown to the user. """
+    """ Retrieve random document from database to be shown to the user. """
 
-    homophonesList = create_homophones_list(random=True)
-    print(homophonesList)
-
-    audio = determine_audio_URL_homophones(homophonesList)
-
-    return render_template("homophones.html", homophones=homophonesList, audio=audio)
+    randomHomophone = find_one_random_document()
+    query = randomHomophone["word"].strip().lower()
+    for string in randomHomophone["homophones"]:
+        query = f'{query}-{string}'
+    return redirect(f"/h/{query}")
 
 
 @main.route("/about/", methods=['GET'])
@@ -55,3 +47,33 @@ def about():
     """ About section of the web application. """
 
     return render_template("about.html")
+
+
+@main.route("/h/<homophoneID>", methods=['GET'])
+def h(homophoneID):
+    """ Direct to homophones.html page """
+
+    print(homophoneID)
+    print(homophoneID.isdigit())
+    if homophoneID.isdigit():
+        nthDocument = find_nth_document(int(homophoneID))
+        print(nthDocument["word"])
+        if nthDocument:
+            wordRoute = nthDocument["word"]
+            print(nthDocument["homophones"])
+            for string in nthDocument["homophones"]:
+                wordRoute = f'{wordRoute}-{string}'
+
+            return redirect(f'/h/{wordRoute.strip()}')
+        else:
+            return render_template("notfound.html", word=homophoneID)
+    else:
+        homophoneID = homophoneID.split("-")[0]
+        print(homophoneID)
+        homophonesList = create_homophones_list(homophoneID)
+        if not homophonesList:
+            return render_template("notfound.html", word=homophoneID)
+
+        audio = determine_audio_URL_homophones(homophonesList)
+
+        return render_template("homophones.html", homophones=homophonesList, audio=audio)

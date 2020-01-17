@@ -13,8 +13,8 @@ MONGO_URI = os.environ.get("MONGO_URI")
 from .fetch_wiktionary_word import fetch_wiktionary_word
 
 
-def find_one_random_document(user_collection: Collection) -> list:
-    """ Return random noun homophone from the database. """
+def find_one_random_document():
+    """ Return dict for random noun homophone from the database. """
 
     # Connect to database
     client = MongoClient(MONGO_URI)
@@ -28,6 +28,17 @@ def find_one_random_document(user_collection: Collection) -> list:
         ])
 
     return list(cursor)[0]
+
+
+def find_nth_document(n):
+    """ Return nth document from database (insertion order). """
+
+    # Connect to database
+    client = MongoClient(MONGO_URI)
+    db = client.frenchhomophones
+    user_collection = db.homophones
+
+    return list(user_collection.find().limit(n))[-1]
 
 
 def determine_audio_URL_homophones(homophonesList):
@@ -71,7 +82,7 @@ def create_homophones_list(query="", random=False):
     homophonesList = []
 
     if random:
-        homophone = find_one_random_document(user_collection)
+        homophone = find_one_random_document()
     else:
         homophone = user_collection.find_one({"word": query.strip()})
         if homophone is None:
