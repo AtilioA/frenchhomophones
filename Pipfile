@@ -11,6 +11,7 @@ wiktionaryparser = "*"
 pymongo = {extras = ["srv"],version = "*"}
 gunicorn = "*"
 flask-wtf = "*"
+mongoengine = "*"
 
 [dev-packages]
 
