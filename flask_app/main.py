@@ -5,15 +5,15 @@ from .utils.controllers_utils import determine_audio_URL_homophones, create_homo
 
 main = Blueprint('main', __name__)
 
-
+@main.route('/<path:urlpath>/', methods=['GET', 'POST'])
 @main.route('/', methods=['GET'])
-def index():
+def index(urlpath='/'):
     """ Homepage of the web application. """
 
     # TODO: Refactor this later
     homophonesLists = []
     audiosList = []
-    for i in range(0, 4):
+    for i in range(0, 5):
         homophonesLists.append(create_homophones_list(random=True))
         audiosList.append(determine_audio_URL_homophones(homophonesLists[i]))
 

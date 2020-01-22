@@ -1,6 +1,5 @@
 import os
 import sys
-from typing import Collection
 
 # Needed to execute this package as a script
 sys.path.append(os.path.join(os.path.dirname(__file__), os.path.pardir))
