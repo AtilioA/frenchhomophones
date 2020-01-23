@@ -31,52 +31,27 @@ def populate_db():
 
     # Connects to database collection. Creates one if it doesn't exist
     client = MongoClient(MONGO_URI)
-    db = client.frenchhomophones
-    homophonesCollection = db.homophones
+    db = client.test
+    homophonesCollection = db.test
     print("Connected to database.")
 
-    with open("homophones.txt", "r+", encoding="utf8") as f:
+    # print(parsedHomophone)
+    # homophonesCollection.insert_one(parsedHomophone)
+    # with open("homophones.txt", "r+", encoding="utf8") as f:
         # Read .txt and append entries (as dictionaries) to list
-        dictList = []
-        for line in f:
-            wordDict = literal_eval(line)
-            dictList.append(wordDict)
+        # dictList = []
+        # for line in f:
+        #     wordDict = literal_eval(line)
+        #     dictList.append(wordDict)
 
         # Insert whole list of dictionaries in one call
-        insertedResult = homophonesCollection.insert_many(dictList)
-
-        print(f"{len(insertedResult.inserted_ids)} documents inserted.")
-        return len(insertedResult.inserted_ids)
-
-
-def request_wiktionary():
-    """ Read french_homophones.txt to request words' informations with WiktionaryParser.
-
-        Write relevant structured information to homophones.txt.
-    """
-
-    # with open("french_homophones.txt", "r+", encoding="utf8") as fHomophones:
-    #     with open("homophones.txt", "a+", encoding="utf8") as fOut:
-    #         words = fHomophones.readlines()
-    #         for word in words:
-    #             parsedHomophone = parser.fetch(word.strip(), "french")
-
-    #             homophone = {
-    #                  'word': parsedHomophone[0]["definitions"][0]["text"][0],
-    #                  'partOfSpeech': parsedHomophone[0]["definitions"][0]["partOfSpeech"],
-    #                  'wordDefinitions': parsedHomophone[0]["definitions"][0]["text"][1:],
-    #                  'sentenceExamples': parsedHomophone[0]["definitions"][0]["examples"],
-    #                  'audio': audio,
-    #                  'homophones': homophones,
-    #                  'ipa': ipa,
-    #                  'infinitive': infinitive
-    #             }
-    #             print(homophone)
-
-    #             fOut.write(f"{homophone}\n")
+        # insertedResult = homophonesCollection.insert_many(dictList)
+    
+        # print(f"{len(insertedResult.inserted_ids)} documents inserted.")
+        # return len(insertedResult.inserted_ids)
     pass
 
 
 if __name__ == "__main__":
-    # populate_db()
+    populate_db()
     pass

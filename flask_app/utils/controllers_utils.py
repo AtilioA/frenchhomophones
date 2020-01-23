@@ -9,13 +9,11 @@ sys.path.append(os.path.join(os.path.dirname(__file__), os.path.pardir))
 from pymongo import MongoClient
 MONGO_URI = os.environ.get("MONGO_URI")
 
-from .fetch_wiktionary_word import fetch_wiktionary_word
-
 
 def find_one_random_document():
     """ Return dict for random noun homophone from the database. """
 
-    # Connect to database
+    # Connect to database collection. Create one if it doesn't exist
     client = MongoClient(MONGO_URI)
     db = client.frenchhomophones
     user_collection = db.homophones
@@ -32,7 +30,7 @@ def find_one_random_document():
 def find_nth_document(n):
     """ Return nth document from database (insertion order). """
 
-    # Connect to database
+    # Connect to database collection. Create one if it doesn't exist
     client = MongoClient(MONGO_URI)
     db = client.frenchhomophones
     user_collection = db.homophones
@@ -73,7 +71,7 @@ def create_homophones_list(query="", random=False):
         if set to `True`.
     """
 
-    # Connects to database collection. Creates one if it doesn't exist
+    # Connect to database collection. Create one if it doesn't exist
     client = MongoClient(MONGO_URI)
     db = client.frenchhomophones
     user_collection = db.homophones
@@ -86,18 +84,6 @@ def create_homophones_list(query="", random=False):
         homophone = user_collection.find_one({"word": query.strip()})
         if homophone is None:
             return None
-
-        # Look for infinitive form if it's a verb
-        try:
-            if homophone["partOfSpeech"] == "verb":
-                root = homophone["root"].strip()
-                print(f"\n\nFetching root: {root}")
-                dictRoot = fetch_wiktionary_word(root)
-                print(f"Root dictionary: {dictRoot}")
-                homophone["rootWord"] = dictRoot
-                print(homophone)
-        except (TypeError, AttributeError):
-            print("Couldn't fetch infinitive form")
 
     # Create list querying all homophones
     homophonesList.append(homophone)
@@ -113,18 +99,6 @@ def create_homophones_list(query="", random=False):
         # If didn't find in the database, proceed to next iteration
         if not wordQueryResult:
             continue
-        else:
-            # Look for infinitive form if it's a verb
-            try:
-                if wordQueryResult["partOfSpeech"] == "verb":
-                    root = wordQueryResult["root"].strip()
-                    print(f"\n\nFetching root: {root}")
-                    dictRoot = fetch_wiktionary_word(root)
-                    print(f"Root dictionary: {dictRoot}")
-                    wordQueryResult["rootWord"] = dictRoot
-                    print(wordQueryResult)
-            except (TypeError, AttributeError):
-                print("Couldn't fetch infinitive form")
 
         homophonesList.append(wordQueryResult)
 
