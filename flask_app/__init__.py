@@ -1,7 +1,7 @@
 from flask import Flask
 
 from .extensions import mongo
-from .main import main
+from .views import views
 
 
 def create_app(config_object='flask_app.settings'):
@@ -13,6 +13,6 @@ def create_app(config_object='flask_app.settings'):
 
     mongo.init_app(app)
 
-    app.register_blueprint(main)
+    app.register_blueprint(views)
 
     return app
