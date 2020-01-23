@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect
+from flask import Blueprint, render_template, send_from_directory, request, redirect
 
 from .controllers import determine_audio_URL_homophones, create_homophones_list, find_nth_document, find_one_random_document
 
@@ -77,3 +77,9 @@ def h(homophoneID):
         audio = determine_audio_URL_homophones(homophonesList)
 
         return render_template("homophones.html", homophones=homophonesList, audio=audio)
+
+
+@views.route("/robots.txt/")
+def robots():
+    """ Send robots.txt. """
+    return send_from_directory("static", "robots.txt")
