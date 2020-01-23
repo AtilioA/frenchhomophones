@@ -7,14 +7,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <link rel="stylesheet" href="../static/assets/style.css">
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
 
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
-    <!-- Font Awesome icons -->
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../static/assets/style.css">
+    <link rel="stylesheet" href="../static/assets/icons.css">
 
     <title>
         {% block title %}{% endblock %}
@@ -34,7 +33,7 @@
                 <div class="navbar-collapse collapse" id="navbarSite">
                     <a href="/random" class="btn btn-success btn-sm my-1 my-xs-0">
                         Random
-                        <span class="fa fa-random randomIcon"></span>
+                        <span class="icon-shuffle randomIcon"></span>
                     </a>
                     <a href="#" class="btn btn-info btn-sm mx-1 mx-xs-0 my-1 my-xs-0 ml-lg-2">
                         Browse by letter
@@ -174,8 +173,8 @@
     <footer id="footer" class="py-3 bg-dark text-white-50">
         <div class="container body-content">
             <div class="container">
-                <span class="text-muted">Built by <a target="_blank" rel="noopener" href="https://github.com/AtilioA">AtilioA <i
-                            class="fa fa-github"></i></a>.</span>
+                <span class="text-muted">Built by <a target="_blank" rel="noopener" href="https://github.com/AtilioA"> AtilioA<i
+                            class="icon-github-circled"></i></a>.</span>
             </div>
         </div>
     </footer>
