@@ -6,6 +6,8 @@ sys.path.append(os.path.join(os.path.dirname(__file__), os.path.pardir))
 from wiktionaryparser import WiktionaryParser
 parser = WiktionaryParser()
 
+from controllers import Homophone
+
 
 def find_infinitive_form(verbDefinition):
     match = re.search(r".*of (\w+)\s*$", verbDefinition)
@@ -94,5 +96,9 @@ def request_homophones_wiktionary():
 
 
 if __name__ == "__main__":
-    # print(fetch_wiktionary_word("abadez"))
-    request_homophones_wiktionary()
+    homophone1 = fetch_wiktionary_word("abadez")
+    homophone2 = fetch_wiktionary_word("abader")
+
+    homophonesList = [homophone1, homophone2]
+    homophones = Homophone(homophonesList)
+    print(homophones.homophonesList)
