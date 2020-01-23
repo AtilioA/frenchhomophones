@@ -12,6 +12,7 @@ pymongo = {extras = ["srv"],version = "*"}
 gunicorn = "*"
 flask-wtf = "*"
 mongoengine = "*"
+flask-compress = "*"
 
 [dev-packages]
 
