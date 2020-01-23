@@ -124,9 +124,6 @@ instance/*
 !instance/.gitignore
 .webassets-cache
 
-homophones*.txt
-*ignore.txt
-
 # virtualenv
 .Python
 pyvenv.cfg
@@ -138,3 +135,8 @@ ENV/
 env.bak/
 venv.bak/
 pip-selfcheck.json
+
+
+homophones*.txt
+*ignoreme.*
+.vscode/

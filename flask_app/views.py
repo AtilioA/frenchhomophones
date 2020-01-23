@@ -1,12 +1,12 @@
 from flask import Blueprint, render_template, request, redirect
 
-# from .extensions import mongo
-from .utils.controllers_utils import determine_audio_URL_homophones, create_homophones_list, find_nth_document, find_one_random_document
+from .controllers import determine_audio_URL_homophones, create_homophones_list, find_nth_document, find_one_random_document
 
-main = Blueprint('main', __name__)
+views = Blueprint('views', __name__)
 
-@main.route('/<path:urlpath>/', methods=['GET', 'POST'])
-@main.route('/', methods=['GET'])
+
+@views.route('/<path:urlpath>/', methods=['GET', 'POST'])  # Catch all undefined routes
+@views.route('/', methods=['GET'])
 def index(urlpath='/'):
     """ Homepage of the web application. """
 
@@ -23,7 +23,7 @@ def index(urlpath='/'):
     return render_template("index.html", homophonesLists=homophonesLists, audios=audiosList)
 
 
-@main.route("/find")
+@views.route("/find")
 def find(query=""):
     """ Handle query from users. """
 
@@ -31,7 +31,7 @@ def find(query=""):
     return redirect(f"/h/{query}")
 
 
-@main.route("/random/", methods=['GET'])
+@views.route("/random/", methods=['GET'])
 def random_route():
     """ Retrieve random document from database to be shown to the user. """
 
@@ -42,16 +42,16 @@ def random_route():
     return redirect(f"/h/{query}")
 
 
-@main.route("/about/", methods=['GET'])
+@views.route("/about/", methods=['GET'])
 def about():
     """ About section of the web application. """
 
     return render_template("about.html")
 
 
-@main.route("/h/<homophoneID>", methods=['GET'])
+@views.route("/h/<homophoneID>", methods=['GET'])
 def h(homophoneID):
-    """ Direct to homophones.html page """
+    """ Homophones's pages route """
 
     print(homophoneID)
     print(homophoneID.isdigit())

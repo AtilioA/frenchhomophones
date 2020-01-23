@@ -43,5 +43,3 @@ if __name__ == "__main__":
     test.save()
 
     print(Word.objects.first()["etymology"])
-
-    pass
