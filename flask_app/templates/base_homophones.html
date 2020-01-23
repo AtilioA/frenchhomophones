@@ -25,16 +25,21 @@
         <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
             <div class="container-fluid">
                 <a class="navbar-brand" href="/">French Homophones</a>
-                <a href="/random" class="btn btn-success btn-sm my-lg-0 mx-lg-0 mx-0 mx-sm-0">
-                    Random
-                    <span class="fa fa-random randomIcon"></span>
-                </a>
 
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSite">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
                 <div class="navbar-collapse collapse" id="navbarSite">
+                    <a href="/random" class="btn btn-success btn-sm my-1 my-xs-0">
+                        Random
+                        <span class="fa fa-random randomIcon"></span>
+                    </a>
+                    <a href="#" class="btn btn-info btn-sm mx-1 mx-xs-0 my-1 my-xs-0 ml-lg-2">
+                        Browse by letter
+                        <span class="fa fa-font browseIcon"></span>
+                    </a>
+
                     <div class="d-inline-flex bd-highlight justify-content-center text-nowrap ml-auto mr-2">
                         <form name="searchForm" class="form-inline my-0 my-lg-0 mt-2 my-lg-0 ml-auto" action="/find"
                             method="GET" onsubmit="return validateForm()">
