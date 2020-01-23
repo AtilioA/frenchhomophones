@@ -10,6 +10,26 @@ sys.path.append(os.path.join(os.path.dirname(__file__), os.path.pardir))
 MONGO_URI = os.environ.get("MONGO_URI")
 
 
+def determine_audio_URL_homophones(homophonesList):
+    """ Return audio URL for list of homophones.
+
+        Return first audio file from Wiktionary from the list of homophones.
+
+        If no audio is available, request from google translate
+        (Request URL may break anytime).
+    """
+
+    # Find any audio file from list of homophones
+    # If not available, get from Google Translate (this URL may break anytime)
+    audio = f"//translate.google.com.vn/translate_tts?ie=&q={homophonesList[0]['word']}&tl=fr-fr&client=tw-ob"
+    for homophone in homophonesList:
+        if homophone["pronunciations"]["audio"]:
+            audio = homophone["pronunciations"]["audio"]
+            print(audio)
+            return audio
+
+
+
 def find_one_random_document():
     """ Return dict for random noun homophone from the database. """
 
