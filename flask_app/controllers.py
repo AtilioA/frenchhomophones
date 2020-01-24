@@ -29,22 +29,16 @@ def determine_audio_URL_homophones(homophonesList):
             return audio
 
 
-
 def find_one_random_document():
-    """ Return dict for random noun homophone from the database. """
-
-    # Connect to database collection. Create one if it doesn't exist
     client = MongoClient(MONGO_URI)
-    db = client.frenchhomophones
-    user_collection = db.homophones
+    db = client.test
+    user_collection = db.test
 
-    cursor = user_collection.aggregate(
-        [
-            {"$match": {"partOfSpeech": "noun"}},
-            {"$sample": {"size": 1}}
-        ])
+    cursor = user_collection.aggregate([
+        { "$sample": { "size": 1 } }
+    ])
 
-    return list(cursor)[0]
+    return list(cursor)
 
 
 def find_nth_document(n):
@@ -52,8 +46,8 @@ def find_nth_document(n):
 
     # Connect to database collection. Create one if it doesn't exist
     client = MongoClient(MONGO_URI)
-    db = client.frenchhomophones
-    user_collection = db.homophones
+    db = client.test
+    user_collection = db.test
 
     return list(user_collection.find().limit(n))[-1]
 
@@ -72,8 +66,8 @@ def create_homophones_list(query="", random=False):
 
     # Connect to database collection. Create one if it doesn't exist
     client = MongoClient(MONGO_URI)
-    db = client.frenchhomophones
-    user_collection = db.homophones
+    db = client.test
+    user_collection = db.test
 
     homophonesList = []
 
@@ -86,7 +80,7 @@ def create_homophones_list(query="", random=False):
 
     # Create list querying all homophones
     homophonesList.append(homophone)
-    for otherHomophone in homophone["homophones"]:
+    for otherHomophone in homophone["pronunciations"]["homophones"]:
         try:
             print(f"Querying {otherHomophone.strip()}...")
             wordQueryResult = user_collection.find_one(
@@ -101,13 +95,21 @@ def create_homophones_list(query="", random=False):
 
         homophonesList.append(wordQueryResult)
 
-    return homophonesList
+    homophones = Homophones(homophonesList)
+
+    return homophones
 
 
-class Homophone:
+class Homophones:
     def __init__(self, homophonesList):
         self.homophonesList = homophonesList
-        self.audio = self.determine_audio_URL(homophonesList)
+        
+        audio = self.determine_audio_URL(homophonesList)
+        try:
+            self.audio = audio[0]
+        except TypeError:
+            self.audio = audio
+            
         self.ipa = self.determine_ipa(homophonesList)
 
     def determine_ipa(self, homophonesList):

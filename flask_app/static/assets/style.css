@@ -1,9 +1,9 @@
 @import url("https://fonts.googleapis.com/css?family=Roboto");
 
 body {
-    background: #f0f0f0;
+    background: #d7dbd9;
     font-family: "Roboto";
-    color: #333333;
+    color: #222222;
 }
 
 /* If the screen size is 601px wide or more, set the font-size of <div> to 80px */
@@ -49,13 +49,18 @@ body {
     justify-content: space-between;
 }
 
+.card {
+    background: #ecf3f1;
+}
+
 #card-infinitive {
-    color: #343434;
+    color: #555555;
     font-size: smaller;
 }
 
 .navbar {
-    background-color: #1C3337;
+    background-color: #152E2B;
+    /* background-color: #1C3337; */
 }
 
 .card-img#main {

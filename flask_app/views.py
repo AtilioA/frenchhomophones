@@ -35,10 +35,12 @@ def find(query=""):
 def random_route():
     """ Retrieve random document from database to be shown to the user. """
 
-    randomHomophone = find_one_random_document()
-    query = randomHomophone["word"].strip().lower()
-    for string in randomHomophone["homophones"]:
-        query = f'{query}-{string}'
+    randomHomophone = find_one_random_document()[0]
+    print(randomHomophone)   
+    query = randomHomophone["word"].lower()
+    print(randomHomophone["pronunciations"]["homophones"])
+    for string in randomHomophone["pronunciations"]["homophones"]:
+        query = f'{query}-{string.lower()}'
     return redirect(f"/h/{query}")
 
 
@@ -60,8 +62,8 @@ def h(homophoneID):
         print(nthDocument["word"])
         if nthDocument:
             wordRoute = nthDocument["word"]
-            print(nthDocument["homophones"])
-            for string in nthDocument["homophones"]:
+            print(nthDocument["pronunciations"]["homophones"])
+            for string in nthDocument["pronunciations"]["homophones"]:
                 wordRoute = f'{wordRoute}-{string}'
 
             return redirect(f'/h/{wordRoute.strip()}')
@@ -70,13 +72,11 @@ def h(homophoneID):
     else:
         homophoneID = homophoneID.split("-")[0]
         print(homophoneID)
-        homophonesList = create_homophones_list(homophoneID)
-        if not homophonesList:
+        homophones = create_homophones_list(homophoneID)
+        if not homophones:
             return render_template("notfound.html", word=homophoneID)
 
-        audio = determine_audio_URL_homophones(homophonesList)
-
-        return render_template("homophones.html", homophones=homophonesList, audio=audio)
+        return render_template("homophones.html", homophones=homophones.homophonesList, audio=homophones.audio, ipa=homophones.ipa)
 
 
 @views.route("/robots.txt/")
