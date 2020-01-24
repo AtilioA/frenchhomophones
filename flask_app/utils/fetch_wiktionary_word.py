@@ -3,10 +3,12 @@ import re
 import sys
 sys.path.append(os.path.join(os.path.dirname(__file__), os.path.pardir))
 
+from multiprocessing import Pool
+
 from wiktionaryparser import WiktionaryParser
 parser = WiktionaryParser()
 
-from controllers import Homophone
+from controllers import Homophones
 
 
 def find_infinitive_form(verbDefinition):
@@ -20,64 +22,90 @@ def find_infinitive_form(verbDefinition):
 def fetch_wiktionary_word(word, isInfinitive=False):
     """ Extract word information with WiktionaryParser """
 
-    parsedHomophone = parser.fetch(word.strip(), "french")[0]
-    if not parsedHomophone["definitions"]:
-        print("Word not found.")
-        exit(-1)
+    try:
+        word = word.strip()
+        print(word)
 
-    # print(parsedHomophone)
+        homophone = {'word': f"{word}"}
+        parsedHomophone = parser.fetch(word, "french")[0]
+        # print(parsedHomophone)
 
-    try: 
-        # If IPA entry exists
-        if parsedHomophone['pronunciations']['text'][0][:3] == "IPA":
-            # print("Has IPA")
-            parsedHomophone['pronunciations']['IPA'] = parsedHomophone['pronunciations']['text'][0]
-            if parsedHomophone['pronunciations']['text'][1][:10] == "Homophones":
-                # print("Has Homophones")
-                parsedHomophone['pronunciations']['homophones'] = parsedHomophone['pronunciations']['text'][1][12:].split(", ")
+        if not (parsedHomophone["definitions"] or parsedHomophone["etymology"] or parsedHomophone["pronunciations"]["text"]):
+            with open("failed.txt", "a+", encoding="utf8") as failed:
+                failed.write(f"{word}\n")
+            print("Word not found.")
+            # print(parsedHomophone)
+            pass
 
-        # If IPA entry doesn't exist
-        elif parsedHomophone['pronunciations']['text'][0][:8] in "Homophone":
-            # print("Doesn't have IPA, has Homophones")
-            parsedHomophone['pronunciations']['IPA'] = None
-            parsedHomophone['pronunciations']['homophones'] = parsedHomophone['pronunciations']['text'][0].split(", ")
-        else:
-            # print(parsedHomophone['pronunciations']['text'][0][:8])
-            print("\n!Something wrong is not right!\n")
-    except KeyError as err:
-        print(err)
+        # PRONUNCIATIONS
+        parsedHomophone['pronunciations']['homophones'] = None
+        try: 
+            # If IPA entry exists
+            if "IPA" in parsedHomophone['pronunciations']['text'][0]:
+                # print("Has IPA")
+                parsedHomophone['pronunciations']['IPA'] = parsedHomophone['pronunciations']['text'][0]
+                for element in parsedHomophone['pronunciations']['text']:
+                    if "Homophone" in element:
+                        # print("Has Homophones")
+                        parsedHomophone['pronunciations']['homophones'] = element.split(", ")
+                        break
 
-    # Delete "text" key from "pronunciations" value
-    parsedHomophone['pronunciations'].pop('text', None)
-    
-    for i, pOS in enumerate(parsedHomophone['definitions']):
-        # Introduce "infinitive" key
-        if pOS['partOfSpeech'] == "verb" and not isInfinitive:
-            # Look for infinitive form if it's a verb
+            # If IPA entry doesn't exist
+            elif "Homophone" in parsedHomophone['pronunciations']['text'][0]:
+                # print("Doesn't have IPA, has Homophones")
+                parsedHomophone['pronunciations']['IPA'] = None
+                parsedHomophone['pronunciations']['homophones'] = parsedHomophone['pronunciations']['text'][0].split(", ")
+            else:
+                # print(parsedHomophone['pronunciations']['text'][0][:8])
+                print("\n!Something wrong is not right!\n")
+        except (IndexError, KeyError) as err:
+            print("Error in pronunciations input.")
+            print(err)
+
+        if not parsedHomophone['pronunciations']['homophones']:
+            print("Entry doesn't have homophones!")
+            with open("failed2.txt", "a+", encoding="utf8") as failed:
+                failed.write(f"No homophones: {word}\n")
+
+        # Delete "text" key from "pronunciations" value
+        parsedHomophone['pronunciations'].pop('text', None)
+        
+        # DEFINITIONS
+        for i, pOS in enumerate(parsedHomophone['definitions']):
             try:
-                infinitive = find_infinitive_form(pOS['text'][1]).strip()
-                # print(f"\nFetching infinitive: {pOS['text'][1]}")
-                # print(infinitive)
-                parsedInfinitive = parser.fetch(infinitive, "french")[0]
-                # print(f"infinitive dictionary: {parsedInfinitive}")
-                parsedHomophone['definitions'][i]['infinitive'] = {
-                    "text": parsedInfinitive['definitions'][0]['text'][0],
-                    "meanings": parsedInfinitive['definitions'][0]['text'][1:]
-                }
-            except (TypeError, AttributeError):
-                print("Couldn't fetch infinitive form")
+                # Split "text" value from "definitions" key into keys "word" and "meanings"
+                # parsedHomophone['word'] = parsedHomophone['definitions'][i]['text'][0]
+                parsedHomophone['definitions'][i]['meanings'] = parsedHomophone['definitions'][i]['text'][1:]
+            except (IndexError, KeyError) as err:
+                print("Error in definitions input.")
+                print(err)
 
-        else:
-            parsedHomophone['definitions'][i]['infinitive'] = None
+            # Introduce "infinitive" key
+            if pOS['partOfSpeech'] == "verb" and not isInfinitive:
+                # Look for infinitive form if it's a verb
+                try:
+                    infinitive = find_infinitive_form(pOS['text'][1]).strip()
+                    # print(f"\nFetching infinitive: {pOS['text'][1]}")
+                    # print(infinitive)
+                    parsedInfinitive = parser.fetch(infinitive, "french")[0]
+                    # print(f"infinitive dictionary: {parsedInfinitive}")
+                    parsedHomophone['definitions'][i]['infinitive'] = {
+                        "text": parsedInfinitive['definitions'][0]['text'][0],
+                        "meanings": parsedInfinitive['definitions'][0]['text'][1:]
+                    }
+                except (IndexError, TypeError, AttributeError):
+                    print("No infinitive form.")
+            else:
+                parsedHomophone['definitions'][i]['infinitive'] = None
 
-        # Split "text" value from "definitions" key into keys "word" and "meanings"
-        parsedHomophone['word'] = parsedHomophone['definitions'][i]['text'][0]
-        parsedHomophone['definitions'][i]['meanings'] = parsedHomophone['definitions'][i]['text'][1:]
-        # Remove "text" value from definitions key
-        word = parsedHomophone['definitions'][i].pop('text', None)
+            # Remove "text" value from definitions key
+            word = parsedHomophone['definitions'][i].pop('text', None)
+            
+    except KeyboardInterrupt:
+        raise KeyboardInterruptError()
 
-
-    return parsedHomophone
+    homophone.update(parsedHomophone)
+    return homophone
 
 
 def request_homophones_wiktionary():
@@ -87,18 +115,23 @@ def request_homophones_wiktionary():
     """
 
     with open("french_homophones.txt", "r+", encoding="utf8") as fHomophones:
-        with open("homophones2.txt", "a+", encoding="utf8") as fOut:
+        with open("homophones.txt", "a+", encoding="utf8") as fOut:
             words = fHomophones.readlines()
-            for word in words[100:300]:
-                print(f"Fetching word {word}", end="")
-                parsedHomophone = fetch_wiktionary_word(word.strip())
-                fOut.write(f"{parsedHomophone}\n")
+            
+            with Pool(10) as p:
+                try:
+                    fetchedHomophones = list(p.map(fetch_wiktionary_word, words[25000:]))
+                except KeyboardInterrupt:
+                    print('Got ^C while pool mapping, terminating the pool')
+                    p.terminate()
+                    print('Terminating pool...')
+                    p.terminate()
+                    p.join()
+                    print('Done!')
 
+            for fetchedHomophone in fetchedHomophones:
+                fOut.write(f"{fetchedHomophone}\n")
+            
 
 if __name__ == "__main__":
-    homophone1 = fetch_wiktionary_word("abadez")
-    homophone2 = fetch_wiktionary_word("abader")
-
-    homophonesList = [homophone1, homophone2]
-    homophones = Homophone(homophonesList)
-    print(homophones.homophonesList)
+    request_homophones_wiktionary()
