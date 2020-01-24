@@ -25805,7 +25805,6 @@ fo%C3%ABnerons
 fo%C3%ABneront
 fo%C3%ABnez
 fo%C3%ABn%C3%A2t
-Template:fr-homophones-er
 fractionna
 fractionnai
 fractionnaient
@@ -33069,7 +33068,6 @@ meuleront
 meules
 meulez
 meul%C3%A2t
-User:MglovesfunBot/er
 micellair
 micellaire
 microdiss%C3%A9que
