@@ -37,7 +37,7 @@
                     </a>
                     <a href="#" class="btn btn-info btn-sm mx-1 mx-xs-0 my-1 my-xs-0 ml-lg-2">
                         Browse by letter
-                        <span class="fa fa-font browseIcon"></span>
+                        <span class="icon-font-1 browseIcon"></span>
                     </a>
 
                     <div class="d-inline-flex bd-highlight justify-content-center text-nowrap ml-auto mr-2">
@@ -72,47 +72,45 @@
         <div class="homophones">
             <div class="container body-content">
                 <div class="container">
-                    <div class="text my-4">
-                        <!-- Text section below navbar -->
-                        <h3><b>{% block homophones_h3 %}{% endblock %}</b></h3>
-                        <h5>{% block homophones_h5 %}{% endblock %} have the same pronunciation but different meanings,
-                            therefore they're homophones of the French language.</h5>
-                    </div>
-
+                <!-- Text section below navbar -->
+                <h3><b>{% block homophones_h3 %}{% endblock %}</b></h3>
+                <div class="text my-4">
+                    <h5>{% block homophones_h5 %}{% endblock %} have the same pronunciation but different meanings,
+                        therefore they're homophones of the French language.</h5>
+                </div>
                     <!-- Homophones' cards -->
                     <div class="row my-2">
                         <!-- "Official" workaround to persist variable changes inside loops in Jinja -->
-                        {% set ns = namespace(hasRoot=False) %}
-
                         {% for word in homophones %}
                         <div class="col-sm-12 col-md-6 my-2">
                             <div class="card shadow-sm">
                                 <div class="card-body">
-                                    {% if word.ipa %}
-                                    <h4 class="card-title"><b>{{word.word}}</b> ({{word.partOfSpeech}}) | {{word.ipa}}
-                                    </h4>
-                                    {% else %}
-                                    <h4 class="card-title"><b>{{word.word}}</b> ({{word.partOfSpeech}})</h4>
-                                    {% endif %}
-                                    {% for definition in word.wordDefinitions %}
-                                    <p class="card-text"><b>{{ loop.index }}.:</b> {{definition}}</p>
-                                    {% endfor %}
-                                    {% if word.rootWord %}
-                                    <hr>
-                                    <div id="card-infinitive" class="container">
-                                        {% set ns.hasRoot = True %}
-                                        {% if word.rootWord.ipa %}
-                                        <h6 class="card-title">Infinitive<sup>†</sup>: <b>{{word.rootWord.word}}</b> |
-                                            {{word.rootWord.ipa}}</h6>
-                                        {% else %}
-                                        <h6 class="card-title">Infinitive<sup>†</sup>: <b>{{word.rootWord.word}}</b>
-                                        </h6>
+                                    <h4 class="card-title"><b>{{word.word}}</b></h4>
+                                    {% set ns = namespace(verbIndex = -1) %}
+                                    {% for definition in word.definitions %}
+                                        {% set outer_loop = loop %}
+                                        {% if definition.partOfSpeech == "verb" %}
+                                            {% set ns.verbIndex = loop.index - 1 %}
                                         {% endif %}
-                                        {% for definition in word.rootWord.wordDefinitions %}
-                                        <p class="card-text"><b>{{ loop.index }}.:</b> {{definition}}</p>
+                                        <h5>{{ definition.partOfSpeech }}:</h5>
+                                        {% for meaning in definition.meanings %}
+                                            <p class="card-text" style="text-indent: 30px"><b>{{outer_loop.index}}.{{ loop.index }}.:</b> {{meaning}}
                                         {% endfor %}
-                                    </div>
+                                        </p>   
+                                    {% endfor %}
+
+                                    {% if ns.verbIndex != -1 and word.definitions[ns.verbIndex].infinitive %}
+                                        <hr>                 
+
+                                        <div id="card-infinitive" class="container">
+                                            <h6 class="card-title">Infinitive: <b>{{word.definitions[ns.verbIndex].infinitive.text}}</b></h6>
+                                            
+                                            {% for meaning in word.definitions[ns.verbIndex].infinitive.meanings %}
+                                                <p class="card-text"><b>{{ loop.index }}.:</b> {{meaning}}</p>
+                                            {% endfor %}
+                                        </div>
                                     {% endif %}
+
                                 </div>
                             </div>
                         </div>
@@ -140,14 +138,7 @@
                     <!-- Attributions, notes, etc -->
                     <div class="text my-4">
                         <i>
-                            <h6>Definitions
-                                {% if audio -%}
-                                and human audios
-                                {%- endif %}
-                                from Wiktionary, Creative Commons Attribution/Share-Alike License.</h6>
-                            {% if ns.hasRoot == True %}
-                            <h6><sup>†</sup>May not be accurate.</h6>
-                            {% endif %}
+                            <h6>Definitions and human audios from Wiktionary, Creative Commons Attribution/Share-Alike License.</h6>
                             <h6><sup>1</sup><a href="https://en.wikipedia.org/wiki/Homophone">Wikipedia</a>.</h6>
                         </i>
                     </div>
