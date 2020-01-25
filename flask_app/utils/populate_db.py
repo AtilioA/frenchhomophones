@@ -33,10 +33,9 @@ def populate_db():
 
         # Insert whole list of dictionaries in one call
         insertedResult = homophonesCollection.insert_many(dictList)
-    
+
         print(f"{len(insertedResult.inserted_ids)} documents inserted.")
         return len(insertedResult.inserted_ids)
-    pass
 
 
 if __name__ == "__main__":
