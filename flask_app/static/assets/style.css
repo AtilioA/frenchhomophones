@@ -50,7 +50,7 @@ body {
 }
 
 .card {
-    background: #ecf3f1;
+    background: #eeeeee;
 }
 
 #card-infinitive {
@@ -110,10 +110,25 @@ input.form-control {
     color: #333333;
 }
 
+.card#random_homophones_card {
+    -webkit-hyphens: auto;
+    -ms-hyphens: auto;
+    hyphens: auto;
+    hyphenate-limit-chars: 6 3 2;
+}
+
 .card#random_homophones_card:hover {
     -webkit-transform: scale(1.20);
     -ms-transform: scale(1.20);
     transform: scale(1.20);
+}
+
+li.list-group-item {
+    background: #eeeeee;
+}
+
+.list-group-item {
+    background: #eeeeee;
 }
 
 /* WIP */
