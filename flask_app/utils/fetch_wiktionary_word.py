@@ -8,8 +8,6 @@ from multiprocessing import Pool
 from wiktionaryparser import WiktionaryParser
 parser = WiktionaryParser()
 
-from controllers import Homophones
-
 
 def find_infinitive_form(verbDefinition):
     match = re.search(r".*of (\w+)\s*$", verbDefinition)
@@ -35,11 +33,10 @@ def fetch_wiktionary_word(word, isInfinitive=False):
                 failed.write(f"{word}\n")
             print("Word not found.")
             # print(parsedHomophone)
-            pass
 
         # PRONUNCIATIONS
         parsedHomophone['pronunciations']['homophones'] = None
-        try: 
+        try:
             # If IPA entry exists
             if "IPA" in parsedHomophone['pronunciations']['text'][0]:
                 # print("Has IPA")
@@ -69,7 +66,7 @@ def fetch_wiktionary_word(word, isInfinitive=False):
 
         # Delete "text" key from "pronunciations" value
         parsedHomophone['pronunciations'].pop('text', None)
-        
+
         # DEFINITIONS
         for i, pOS in enumerate(parsedHomophone['definitions']):
             try:
@@ -100,7 +97,7 @@ def fetch_wiktionary_word(word, isInfinitive=False):
 
             # Remove "text" value from definitions key
             word = parsedHomophone['definitions'][i].pop('text', None)
-            
+
     except KeyboardInterrupt:
         raise KeyboardInterruptError()
 
@@ -117,7 +114,7 @@ def request_homophones_wiktionary():
     with open("french_homophones.txt", "r+", encoding="utf8") as fHomophones:
         with open("homophones.txt", "a+", encoding="utf8") as fOut:
             words = fHomophones.readlines()
-            
+
             with Pool(10) as p:
                 try:
                     fetchedHomophones = list(p.map(fetch_wiktionary_word, words[25000:]))
@@ -131,7 +128,7 @@ def request_homophones_wiktionary():
 
             for fetchedHomophone in fetchedHomophones:
                 fOut.write(f"{fetchedHomophone}\n")
-            
+
 
 if __name__ == "__main__":
     request_homophones_wiktionary()

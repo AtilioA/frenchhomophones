@@ -5,25 +5,6 @@ import sys
 sys.path.append(os.path.join(os.path.dirname(__file__), os.path.pardir))
 
 
-def determine_audio_URL_homophones(homophonesList):
-    """ Return audio URL for list of homophones.
-
-        Return first audio file from Wiktionary from the list of homophones.
-
-        If no audio is available, request from google translate
-        (Request URL may break anytime).
-    """
-
-    # Find any audio file from list of homophones
-    # If not available, get from Google Translate (this URL may break anytime)
-    audio = f"//translate.google.com.vn/translate_tts?ie=&q={homophonesList[0]['word']}&tl=fr-fr&client=tw-ob"
-    for homophone in homophonesList:
-        if homophone["pronunciations"]["audio"]:
-            audio = homophone["pronunciations"]["audio"]
-            # print(audio)
-            return audio
-
-
 def find_one_random_document(user_collection):
     cursor = user_collection.aggregate([
         { "$sample": { "size": 1 } }
@@ -87,16 +68,16 @@ class Homophones:
     def __init__(self, homophonesList):
         self.homophonesList = homophonesList
 
-        audio = self.determine_audio_URL(homophonesList)
+        audio = self.determine_audio_URL()
         # print(audio)
-        if type(audio) == list:
+        if isinstance(audio, list):
             self.audio = audio[0]
         else:
             self.audio = audio
 
-        self.ipa = self.determine_ipa(homophonesList)
+        self.ipa = self.determine_ipa()
 
-    def determine_ipa(self, homophonesList):
+    def determine_ipa(self):
         """ Return IPA for list of homophones.
 
             Return first IPA string from Wiktionary from the list of homophones.
@@ -105,14 +86,14 @@ class Homophones:
         """
 
         # Find any IPA string from list of homophones
-        for homophone in homophonesList:
+        for homophone in self.homophonesList:
             if homophone["pronunciations"]["IPA"]:
                 ipa = homophone["pronunciations"]["IPA"]
                 # print(ipa)
                 return ipa
         return None
 
-    def determine_audio_URL(self, homophonesList):
+    def determine_audio_URL(self):
         """ Return audio URL for list of homophones.
 
             Return first audio file from Wiktionary from the list of homophones.
@@ -123,8 +104,8 @@ class Homophones:
 
         # Find any audio file from list of homophones
         # If not available, get from Google Translate (this URL may break anytime)
-        audio = f"//translate.google.com.vn/translate_tts?ie=&q={homophonesList[0]['word']}&tl=fr-fr&client=tw-ob"
-        for homophone in homophonesList:
+        audio = f"//translate.google.com.vn/translate_tts?ie=&q={self.homophonesList[0]['word']}&tl=fr-fr&client=tw-ob"
+        for homophone in self.homophonesList:
             if homophone["pronunciations"]["audio"]:
                 audio = homophone["pronunciations"]["audio"]
         return audio

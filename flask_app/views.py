@@ -3,7 +3,7 @@ import os
 
 from flask import Blueprint, render_template, send_from_directory, request, redirect
 
-from .controllers import determine_audio_URL_homophones, create_homophones_list, find_nth_document, find_one_random_document
+from .controllers import create_homophones_list, find_nth_document, find_one_random_document
 
 views = Blueprint('views', __name__)
 MONGO_URI = os.environ.get("MONGO_URI")
@@ -62,7 +62,7 @@ def h(homophoneID):
     # print(homophoneID)
     # print(homophoneID.isdigit())
     if homophoneID.isdigit():
-        nthDocument = find_nth_document(int(homophoneID))
+        nthDocument = find_nth_document(user_collection, int(homophoneID))
         # print(nthDocument["word"])
         if nthDocument:
             wordRoute = nthDocument["word"]
