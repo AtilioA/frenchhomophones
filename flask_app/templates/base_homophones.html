@@ -44,9 +44,9 @@
                         <form name="searchForm" class="form-inline my-0 my-lg-0 mt-2 my-lg-0 ml-auto" action="/find"
                             method="GET" onsubmit="return validateForm()">
                             <input class="form-control mr-sm-1 my-lg-0 my-sm-0 my-2" name="search" type="search"
-                                placeholder="Word" aria-label="Search" required>
-                            <button class="btn btn-outline-success my-lg-0 mx-md-0" type="submit">Search
-                                homophone</button>
+                            placeholder="Word" aria-label="Search" required>
+                            <button class="btn btn-outline-success mr-auto my-lg-0 mx-md-0" type="submit">Search
+                            homophone</button>
                         </form>
                     </div>
 
@@ -73,7 +73,7 @@
             <div class="container body-content">
                 <div class="container">
                 <!-- Text section below navbar -->
-                <h3><b>{% block homophones_h3 %}{% endblock %}</b></h3>
+                <h2><b>{% block homophones_h2 %}{% endblock %}</b></h2>
                 <div class="text my-4">
                     <h5>{% block homophones_h5 %}{% endblock %} have the same pronunciation but different meanings,
                         therefore they're homophones of the French language.</h5>
@@ -85,14 +85,14 @@
                         <div class="col-sm-12 col-md-6 my-2">
                             <div class="card shadow-sm">
                                 <div class="card-body">
-                                    <h4 class="card-title"><b>{{word.word}}</b></h4>
+                                    <h3 class="card-title"><b>{{word.word}}</b></h3>
                                     {% set ns = namespace(verbIndex = -1) %}
                                     {% for definition in word.definitions %}
                                         {% set outer_loop = loop %}
                                         {% if definition.partOfSpeech == "verb" %}
                                             {% set ns.verbIndex = loop.index - 1 %}
                                         {% endif %}
-                                        <h5>{{ definition.partOfSpeech }}:</h5>
+                                        <h5>- <i>{{ definition.partOfSpeech }}:</i></h5>
                                         {% for meaning in definition.meanings %}
                                             <p class="card-text" style="text-indent: 30px"><b>{{outer_loop.index}}.{{ loop.index }}.:</b> {{meaning}}
                                         {% endfor %}

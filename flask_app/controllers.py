@@ -1,13 +1,8 @@
-from pymongo import MongoClient
 import os
 import sys
 
 # Needed to execute this package as a script
 sys.path.append(os.path.join(os.path.dirname(__file__), os.path.pardir))
-
-# MongoDB
-# from flask_pymongo import PyMongo
-MONGO_URI = os.environ.get("MONGO_URI")
 
 
 def determine_audio_URL_homophones(homophonesList):
@@ -25,35 +20,26 @@ def determine_audio_URL_homophones(homophonesList):
     for homophone in homophonesList:
         if homophone["pronunciations"]["audio"]:
             audio = homophone["pronunciations"]["audio"]
-            print(audio)
+            # print(audio)
             return audio
 
 
-def find_one_random_document():
-    client = MongoClient(MONGO_URI)
-    db = client.test
-    user_collection = db.test
-
+def find_one_random_document(user_collection):
     cursor = user_collection.aggregate([
         { "$sample": { "size": 1 } }
     ])
 
-    return list(cursor)
+    return list(cursor)[0]
 
 
-def find_nth_document(n):
+def find_nth_document(user_collection, n):
     """ Return nth document from database (insertion order). """
-
-    # Connect to database collection. Create one if it doesn't exist
-    client = MongoClient(MONGO_URI)
-    db = client.test
-    user_collection = db.test
 
     return list(user_collection.find().limit(n))[-1]
 
 
-def create_homophones_list(query="", random=False):
-    """ Return list with queried word (if applicable) and its homophones.
+def create_homophones_list(user_collection, query="", random=False):
+    """ Return Homophone object with queried word (if applicable) and its homophones.
 
         Until infinitive forms are stored in the database,
         will look up with WiktionaryParser during execution.
@@ -64,15 +50,11 @@ def create_homophones_list(query="", random=False):
         if set to `True`.
     """
 
-    # Connect to database collection. Create one if it doesn't exist
-    client = MongoClient(MONGO_URI)
-    db = client.test
-    user_collection = db.test
-
     homophonesList = []
 
     if random:
-        homophone = find_one_random_document()
+        homophone = find_one_random_document(user_collection)
+        # print(homophone)
     else:
         homophone = user_collection.find_one({"word": query.strip()})
         if homophone is None:
@@ -80,12 +62,13 @@ def create_homophones_list(query="", random=False):
 
     # Create list querying all homophones
     homophonesList.append(homophone)
+    print(homophone)
     for otherHomophone in homophone["pronunciations"]["homophones"]:
         try:
-            print(f"Querying {otherHomophone.strip()}...")
+            # print(f"Querying {otherHomophone.strip()}...")
             wordQueryResult = user_collection.find_one(
-                {"word": otherHomophone.strip()})
-            print(f"query: {wordQueryResult}")
+                {"word": otherHomophone})
+            # print(f"query: {wordQueryResult}")
         except TypeError:  # If the query return None
             wordQueryResult = None
 
@@ -103,13 +86,14 @@ def create_homophones_list(query="", random=False):
 class Homophones:
     def __init__(self, homophonesList):
         self.homophonesList = homophonesList
-        
+
         audio = self.determine_audio_URL(homophonesList)
-        try:
+        # print(audio)
+        if type(audio) == list:
             self.audio = audio[0]
-        except TypeError:
+        else:
             self.audio = audio
-            
+
         self.ipa = self.determine_ipa(homophonesList)
 
     def determine_ipa(self, homophonesList):
@@ -124,7 +108,7 @@ class Homophones:
         for homophone in homophonesList:
             if homophone["pronunciations"]["IPA"]:
                 ipa = homophone["pronunciations"]["IPA"]
-                print(ipa)
+                # print(ipa)
                 return ipa
         return None
 
@@ -143,5 +127,4 @@ class Homophones:
         for homophone in homophonesList:
             if homophone["pronunciations"]["audio"]:
                 audio = homophone["pronunciations"]["audio"]
-                print(audio)
-                return audio
+        return audio

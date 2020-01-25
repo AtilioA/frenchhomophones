@@ -1,24 +1,27 @@
+from pymongo import MongoClient
+import os
+
 from flask import Blueprint, render_template, send_from_directory, request, redirect
 
 from .controllers import determine_audio_URL_homophones, create_homophones_list, find_nth_document, find_one_random_document
 
 views = Blueprint('views', __name__)
+MONGO_URI = os.environ.get("MONGO_URI")
 
+client = MongoClient(MONGO_URI)
+db = client.test
+user_collection = db.test
 
 @views.route('/<path:urlpath>/', methods=['GET', 'POST'])  # Catch all undefined routes
 @views.route('/', methods=['GET'])
 def index(urlpath='/'):
     """ Homepage of the web application. """
 
-    # TODO: Refactor this later
     homophonesLists = []
     audiosList = []
     for i in range(0, 5):
-        homophonesLists.append(create_homophones_list(random=True))
-        audiosList.append(determine_audio_URL_homophones(homophonesLists[i]))
-
-    print(audiosList)
-    print(homophonesLists)
+        homophonesLists.append(create_homophones_list(user_collection=user_collection, random=True))
+        audiosList.append(homophonesLists[i].audio)
 
     return render_template("index.html", homophonesLists=homophonesLists, audios=audiosList)
 
@@ -35,10 +38,11 @@ def find(query=""):
 def random_route():
     """ Retrieve random document from database to be shown to the user. """
 
-    randomHomophone = find_one_random_document()[0]
-    print(randomHomophone)   
+    randomHomophone = find_one_random_document(user_collection)
+    # print(randomHomophone)
+
     query = randomHomophone["word"].lower()
-    print(randomHomophone["pronunciations"]["homophones"])
+
     for string in randomHomophone["pronunciations"]["homophones"]:
         query = f'{query}-{string.lower()}'
     return redirect(f"/h/{query}")
@@ -55,14 +59,14 @@ def about():
 def h(homophoneID):
     """ Homophones's pages route """
 
-    print(homophoneID)
-    print(homophoneID.isdigit())
+    # print(homophoneID)
+    # print(homophoneID.isdigit())
     if homophoneID.isdigit():
         nthDocument = find_nth_document(int(homophoneID))
-        print(nthDocument["word"])
+        # print(nthDocument["word"])
         if nthDocument:
             wordRoute = nthDocument["word"]
-            print(nthDocument["pronunciations"]["homophones"])
+            # print(nthDocument["pronunciations"]["homophones"])
             for string in nthDocument["pronunciations"]["homophones"]:
                 wordRoute = f'{wordRoute}-{string}'
 
@@ -71,8 +75,8 @@ def h(homophoneID):
             return render_template("notfound.html", word=homophoneID)
     else:
         homophoneID = homophoneID.split("-")[0]
-        print(homophoneID)
-        homophones = create_homophones_list(homophoneID)
+        # print(homophoneID)
+        homophones = create_homophones_list(user_collection=user_collection, query=homophoneID)
         if not homophones:
             return render_template("notfound.html", word=homophoneID)
 
