@@ -1,0 +1,17 @@
+{% extends 'base_browse.html' %}
+
+{% block title %}
+Page {{currentPage}} - French Homophones
+{% endblock %}
+
+{% block homophones_h2 %}
+{%- for Homophone in homophonesLists %}
+        {%- for word in Homophone.homophonesList %}
+            {%- if loop.last %} and {{ word.word }}
+            {%- elif loop.index == homophones|length - 1 %} {{word.word}}
+            {%- else -%}
+                {{ word.word }},
+            {%- endif -%}
+        {%- endfor -%}
+    {%- endfor %}
+{%- endblock -%}
