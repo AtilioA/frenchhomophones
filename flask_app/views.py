@@ -9,8 +9,8 @@ views = Blueprint('views', __name__)
 MONGO_URI = os.environ.get("MONGO_URI")
 
 client = MongoClient(MONGO_URI)
-db = client.test
-user_collection = db.test
+db = client.frenchhomophones
+user_collection = db.homophones
 
 @views.route('/<path:urlpath>/', methods=['GET', 'POST'])  # Catch all undefined routes
 @views.route('/', methods=['GET'])
@@ -19,7 +19,7 @@ def index(urlpath='/'):
 
     homophonesLists = []
     audiosList = []
-    for i in range(0, 5):
+    for _ in range(0, 4):
         homophonesLists.append(create_homophones_list(user_collection=user_collection, random=True))
         audiosList.append(homophonesLists[i].audio)
 
@@ -39,7 +39,7 @@ def random_route():
     """ Retrieve random document from database to be shown to the user. """
 
     randomHomophone = find_one_random_document(user_collection)
-    # print(randomHomophone)
+    print(randomHomophone)
 
     query = randomHomophone["word"].lower()
 
@@ -59,7 +59,7 @@ def about():
 def h(homophoneID):
     """ Homophones's pages route """
 
-    # print(homophoneID)
+    print(homophoneID)
     # print(homophoneID.isdigit())
     if homophoneID.isdigit():
         nthDocument = find_nth_document(user_collection, int(homophoneID))

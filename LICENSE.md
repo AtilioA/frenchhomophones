@@ -27,7 +27,9 @@ SOFTWARE.
    (c) Stephen Hutchings 2012
 
    Author:    Stephen Hutchings
+
    License:   SIL (<http://scripts.sil.org/OFL>)
+
    Homepage:  <http://typicons.com/>
 
 ## Font Awesome
@@ -35,13 +37,17 @@ SOFTWARE.
    Copyright (C) 2016 by Dave Gandy
 
    Author:    Dave Gandy
+
    License:   SIL (<http://scripts.sil.org/OFL>)
+
    Homepage:  <http://fortawesome.github.com/Font-Awesome/>
 
 ## Material Icons
 
    Copyright (C) 2020 by Google
-   
+
    Author:    Google
+
    License:   Apache license version 2.0 (<https://www.apache.org/licenses/LICENSE-2.0.txt)>
+   
    Homepage:  <https://github.com/google/material-design-icons>
