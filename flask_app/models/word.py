@@ -32,14 +32,14 @@ class Word(me.Document):
 if __name__ == "__main__":
     me.connect("frenchhomophones", host=MONGO_URI)
     print("Connected to database.")
-    
+
     parsedHomophone = parser.fetch("fer", "french")[0]
     parsedHomophone2 = parser.fetch("faire", "french")[0]
     test = Word(
-        etymology=parsedHomophone["etymology"],
-        definitions=parsedHomophone["definitions"],
-        pronunciations=parsedHomophone["pronunciations"]
+        etymology=parsedHomophone['etymology'],
+        definitions=parsedHomophone['definitions'],
+        pronunciations=parsedHomophone['pronunciations']
     )
     test.save()
 
-    print(Word.objects.first()["etymology"])
+    print(Word.objects.first()['etymology'])

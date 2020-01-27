@@ -36,7 +36,7 @@ def fetch_wiktionary_word(word, isInfinitive=False):
         parsedHomophone = parser.fetch(word, "french")[0]
         # print(parsedHomophone)
 
-        if not (parsedHomophone["definitions"] or parsedHomophone["etymology"] or parsedHomophone["pronunciations"]["text"]):
+        if not (parsedHomophone['definitions'] or parsedHomophone['etymology'] or parsedHomophone['pronunciations']['text']):
             with open("failed.txt", "a+", encoding="utf8", errors='ignore') as failed:
                 failed.write(f"{word}\n")
             print("Word not found.")

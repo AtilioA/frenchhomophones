@@ -5,21 +5,21 @@ import sys
 sys.path.append(os.path.join(os.path.dirname(__file__), os.path.pardir))
 
 
-def find_one_random_document(user_collection):
-    cursor = user_collection.aggregate([
+def find_one_random_document(userCollection):
+    cursor = userCollection.aggregate([
         { "$sample": { "size": 1 } }
     ])
 
     return list(cursor)[0]
 
 
-def find_nth_document(user_collection, n):
+def find_nth_document(userCollection, n):
     """ Return nth document from database (insertion order). """
 
-    return list(user_collection.find().limit(n))[-1]
+    return userCollection.find_one(skip=n)
 
 
-def create_homophones_list(user_collection, query="", random=False):
+def create_homophones_list(userCollection, query="", random=False):
     """ Return Homophone object with queried word (if applicable) and its homophones.
 
         Until infinitive forms are stored in the database,
@@ -34,20 +34,20 @@ def create_homophones_list(user_collection, query="", random=False):
     homophonesList = []
 
     if random:
-        homophone = find_one_random_document(user_collection)
+        homophone = find_one_random_document(userCollection)
         # print(homophone)
     else:
-        homophone = user_collection.find_one({"word": query.strip()})
+        homophone = userCollection.find_one({"word": query.strip()})
         if homophone is None:
             return None
 
     # Create list querying all homophones
     homophonesList.append(homophone)
     print(homophone)
-    for otherHomophone in homophone["pronunciations"]["homophones"]:
+    for otherHomophone in homophone['pronunciations']['homophones']:
         try:
             # print(f"Querying {otherHomophone.strip()}...")
-            wordQueryResult = user_collection.find_one(
+            wordQueryResult = userCollection.find_one(
                 {"word": otherHomophone})
             # print(f"query: {wordQueryResult}")
         except TypeError:  # If the query return None
@@ -87,8 +87,8 @@ class Homophones:
 
         # Find any IPA string from list of homophones
         for homophone in self.homophonesList:
-            if homophone["pronunciations"]["IPA"]:
-                ipa = homophone["pronunciations"]["IPA"]
+            if homophone['pronunciations']['IPA']:
+                ipa = homophone['pronunciations']['IPA']
                 # print(ipa)
                 return ipa
         return None
@@ -104,8 +104,8 @@ class Homophones:
 
         # Find any audio file from list of homophones
         # If not available, get from Google Translate (this URL may break anytime)
-        audio = f"https://translate.google.com.vn/translate_tts?ie=&q={self.homophonesList[0]['word']}&tl=fr-fr&client=tw-ob"
+        audio = f"//translate.google.com.vn/translate_tts?ie=&q={self.homophonesList[0]['word']}&tl=fr-fr&client=tw-ob"
         for homophone in self.homophonesList:
-            if homophone["pronunciations"]["audio"]:
-                audio = homophone["pronunciations"]["audio"]
+            if homophone['pronunciations']['audio']:
+                audio = homophone['pronunciations']['audio']
         return audio
