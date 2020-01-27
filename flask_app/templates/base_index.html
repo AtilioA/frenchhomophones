@@ -82,7 +82,7 @@
                 </div>
 
                 <div id="main" class="card bg-dark text-light text-center mb-4">
-                    <img id="main" class="card-img img-fluid" src="../static/assets/Flag_of_La_Francophonie.png"
+                    <img id="main_bg_img" class="card-img img-fluid" src="../static/assets/Flag_of_La_Francophonie.png"
                         alt="Card image">
                     <div class="card-img-overlay">
                         <div class="row align-items-center" style="height: 65%">
@@ -108,10 +108,11 @@
                                             <div>
                                                 <a onclick="document.getElementById('player{{loop.index0}}').play()"><img
                                                         src="../static/assets/materialicons_volume_up.svg" alt="Play"
-                                                        id="play_button"></a>
+                                                        class="play_button"></a>
                                             </div>
                                         </div>
                                         <a id="card_link_to_random_homophone"
+                                            alt="Link to the homophone group"
                                             href="/find?search={{Homophone.homophonesList[0]["word"]}}">
                                             <div class="card-body">
                                                 <ul class="list-group list-group-flush">
@@ -134,7 +135,7 @@
                 </div>
 
 
-                <hr id="whatarehomophones">
+                <hr id="what_are_homophones">
 
                 <div class="row">
                     <div class="col-sm-12 col-md-12 my-2 mb-4">

@@ -1,9 +1,9 @@
 @import url("https://fonts.googleapis.com/css?family=Roboto");
 
 body {
-    background: #d7dbd9;
+    background: #e3e7e5;
     font-family: "Roboto";
-    color: #222222;
+    color: #101010;
 }
 
 /* If the screen size is 601px wide or more, set the font-size of <div> to 80px */
@@ -53,8 +53,8 @@ body {
     background: #eeeeee;
 }
 
-#card-infinitive {
-    color: #555555;
+.card-infinitive {
+    color: #444444;
     font-size: smaller;
 }
 
@@ -63,18 +63,18 @@ body {
     /* background-color: #1C3337; */
 }
 
-.card-img#main {
-    transition: all 1.5s ease;
-    -webkit-filter: blur(50px);
-    /* Chrome, Safari, Opera */
-    filter: blur(50px);
-}
-
 .card#main:hover>*:not(.card-img-overlay) {
-    transition: 0.25s ease;
+    transition: 0.2s ease;
     -webkit-filter: blur(0px);
     /* Chrome, Safari, Opera */
     filter: blur(0px);
+}
+
+.card-img#main_bg_img {
+    transition: all 0.5s ease;
+    -webkit-filter: blur(50px);
+    /* Chrome, Safari, Opera */
+    filter: blur(50px);
 }
 
 .center {
@@ -111,7 +111,7 @@ input.form-control {
 
 #card_link_to_random_homophone {
     text-decoration: none;
-    color: #333333;
+    color: #1F1F1F;
 }
 
 .card#random_homophones_card {
@@ -148,7 +148,12 @@ li.list-group-item {
     transform: scale(1.20);
 }
 
-img#play_button {
+a.play_button{
+    width: 48px;
+    height: 48px;
+}
+
+img.play_button {
     width: 48px;
     height: 48px;
 }
