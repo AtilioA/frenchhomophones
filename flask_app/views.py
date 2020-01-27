@@ -19,7 +19,7 @@ def index(urlpath='/'):
 
     homophonesLists = []
     audiosList = []
-    for _ in range(0, 4):
+    for i in range(0, 4):
         homophonesLists.append(create_homophones_list(user_collection=user_collection, random=True))
         audiosList.append(homophonesLists[i].audio)
 
