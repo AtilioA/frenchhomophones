@@ -1,13 +1,47 @@
 import os
+import time
+import urllib.parse
 from pymongo import MongoClient
 # To read dictionaries from txt
 from ast import literal_eval
 # To get structured data from Wiktionary
+from multiprocessing import Pool
+
 from wiktionaryparser import WiktionaryParser
 parser = WiktionaryParser()
 
 # MongoDB
 MONGO_URI = os.environ.get("MONGO_URI")
+
+# Connects to database collection. Creates one if it doesn't exist
+client = MongoClient(MONGO_URI)
+db = client.frenchhomophones
+homophonesCollection = db.homophones
+print("Connected to database.")
+
+
+def update_many_unquote(word):
+    wordText = word["word"]
+    homophonesCollection.update_many({"word": f"{wordText}"}, { "$set": { "word": urllib.parse.unquote(wordText)}})
+
+
+def process_missing_homophone(Homophone):
+    try:
+        with open("missing.txt", "a+", encoding="utf8", errors='ignore') as f:
+            for homophone in Homophone["pronunciations"]["homophones"]:
+                if homophonesCollection.find_one({"word": f"{homophone}"}) is None:
+                    print(f"{homophone} is missing. Logging...")
+                    f.write(f"{homophone}\n")
+    except KeyError:
+        print("fds")
+
+
+def log_missing_homophones():
+    allHomophones = list(homophonesCollection.find())
+
+    with Pool(10) as p:
+        p.map(process_missing_homophone, allHomophones)
+    print("Logged all missing homophones.")
 
 
 def populate_db():
@@ -16,15 +50,7 @@ def populate_db():
     Return the number of inserted documents.
     """
 
-    # Connects to database collection. Creates one if it doesn't exist
-    client = MongoClient(MONGO_URI)
-    db = client.test
-    homophonesCollection = db.test
-    print("Connected to database.")
-
-    # print(parsedHomophone)
-    # homophonesCollection.insert_one(parsedHomophone)
-    with open("homophones.txt", "r+", encoding="utf8") as f:
+    with open("homophones.txt", "r+", encoding="utf8", errors='ignore') as f:
         # Read .txt and append entries (as dictionaries) to list
         dictList = []
         for line in f:
@@ -39,4 +65,6 @@ def populate_db():
 
 
 if __name__ == "__main__":
-    populate_db()
+    # populate_db()
+    # log_missing_homophones()
+    pass
