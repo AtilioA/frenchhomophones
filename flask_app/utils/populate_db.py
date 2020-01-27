@@ -20,15 +20,10 @@ homophonesCollection = db.homophones
 print("Connected to database.")
 
 
-def update_many_unquote(word):
-    wordText = word["word"]
-    homophonesCollection.update_many({"word": f"{wordText}"}, { "$set": { "word": urllib.parse.unquote(wordText)}})
-
-
 def process_missing_homophone(Homophone):
     try:
         with open("missing.txt", "a+", encoding="utf8", errors='ignore') as f:
-            for homophone in Homophone["pronunciations"]["homophones"]:
+            for homophone in Homophone['pronunciations']['homophones']:
                 if homophonesCollection.find_one({"word": f"{homophone}"}) is None:
                     print(f"{homophone} is missing. Logging...")
                     f.write(f"{homophone}\n")

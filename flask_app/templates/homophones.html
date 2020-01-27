@@ -16,9 +16,8 @@
         {%- else %} {{ word.word }},
         {%- endif -%}
     {%- endfor %}
-
-    <br />
-
+{% endblock %}
+{% block homophones_h3_pronunciation %}
     <audio id="player" src="{{audio}}" type="audio"></audio>
     <div>
         {% if ipa %}
