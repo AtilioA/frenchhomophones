@@ -104,7 +104,7 @@ class Homophones:
 
         # Find any audio file from list of homophones
         # If not available, get from Google Translate (this URL may break anytime)
-        audio = f"//translate.google.com.vn/translate_tts?ie=&q={self.homophonesList[0]['word']}&tl=fr-fr&client=tw-ob"
+        audio = f"https://translate.google.com.vn/translate_tts?ie=&q={self.homophonesList[0]['word']}&tl=fr-fr&client=tw-ob"
         for homophone in self.homophonesList:
             if homophone["pronunciations"]["audio"]:
                 audio = homophone["pronunciations"]["audio"]

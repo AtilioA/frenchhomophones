@@ -11,11 +11,11 @@ About
 {% block body_content_text %}
     <p>This is a small Flask web application I built during 2019-2020 summer vacation. My inspiration was <a href="https://www.homophone.com/">this website</a>, which showed me interesting English homophones from time to time; I used it as my homepage (on random) until I created my own, for French.</p>
 
-    <p>I crawled through <a href ="https://en.wiktionary.org/w/index.php?title=Category:French_terms_with_homophones">Wiktionary's category of French homophones</a> with <a href="https://pypi.org/project/beautifulsoup4/">BeautifulSoup</a> and parsed words URLs entries with <a href="https://pypi.org/project/wiktionaryparser/">WiktionaryParser</a>. Thus, I had successfully extracted meaning from Wiktionary, I just had to create a database and a web application for it.
+    <p>To gather the data, I crawled through <a href ="https://en.wiktionary.org/w/index.php?title=Category:French_terms_with_homophones">Wiktionary's category of French homophones</a> with <a href="https://pypi.org/project/beautifulsoup4/">BeautifulSoup</a> and parsed words URLs entries with <a href="https://pypi.org/project/wiktionaryparser/">WiktionaryParser</a> (with a bit of manipulation of my own). Thus, I had successfully extracted meaning from Wiktionary, I just had to create a database and a web application for it.
 
-    <p>SQL solutions are limited to 10k rows on Heroku (Wiktionary has almost 60k homophones listed), so I went with MongoDB at mLab/Atlas, which offers 0.5GB storage for free and is easy enough to integrate with Heroku.</p>
+    <p>SQL solutions are limited to 10k rows on Heroku (Wiktionary has almost 100k homophones listed), so I went with MongoDB at mLab/Atlas, which offers 0.5GB storage for free and is easy enough to integrate with Heroku.</p>
 
     <p>Flask extended with PyMongo was enough to carry out database connection and the web application's core. For CSS, I used Bootstrap. Still did not mess with JavaScript...</p>
-    
+
     <p>Feel free to contribute through the <a title="Link to GitHub repository" href="https://github.com/AtilioA/frenchhomophones">GitHub repository <i class="icon-github-circled"></i></a>.</p>
 {% endblock %}

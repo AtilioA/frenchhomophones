@@ -84,6 +84,10 @@ body {
     width: 50%;
 }
 
+.navbar-toggler {
+    border: none;
+}
+
 input.form-control {
     background-color: #e6e6e6;
 }
