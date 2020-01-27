@@ -4,7 +4,10 @@
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=yes">
+
+    <meta name="description" content="{{homophones[0]}} are homophones of the French language. You can learn more about them and many other here.">
+    <link href="https://www.frenchhomophones.tech/" rel="canonical" />
 
     <!-- CSS -->
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
@@ -26,9 +29,13 @@
             <div class="container-fluid">
                 <a class="navbar-brand" href="/">French Homophones</a>
 
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSite">
+                <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSite" aria-label="Toggle navigation bar button">
                     <span class="navbar-toggler-icon"></span>
-                </button>
+                </button> -->
+                <button class="navbar-toggler second-button" type="button" data-toggle="collapse" data-target="#navbarSite"
+                aria-controls="navbarSite" aria-expanded="false" aria-label="Toggle navigation">
+                <div class="animated-icon2"><span class="navbar-toggler-icon"></span></div>
+                 </button>
 
                 <div class="navbar-collapse collapse" id="navbarSite">
                     <a href="/random" class="btn btn-success btn-sm my-1 my-xs-0">
@@ -73,8 +80,8 @@
             <div class="container body-content">
                 <div class="container">
                 <!-- Text section below navbar -->
-                <h2><b>{% block homophones_h2 %}{% endblock %}</b></h2>
                 <div class="text my-4">
+                <h2><b>{% block homophones_h2 %}{% endblock %}</b></h2>
                     <h5>{% block homophones_h5 %}{% endblock %} have the same pronunciation but different meanings,
                         therefore they're homophones of the French language.</h5>
                 </div>
@@ -85,26 +92,26 @@
                         <div class="col-sm-12 col-md-6 my-2">
                             <div class="card shadow-sm">
                                 <div class="card-body">
-                                    <h3 class="card-title"><b>{{word.word}}</b></h3>
+                                    <h3 lang="fr" xml:lang="fr" class="card-title"><b>{{word.word}}</b></h3>
                                     {% set ns = namespace(verbIndex = -1) %}
                                     {% for definition in word.definitions %}
-                                        {% set outer_loop = loop %}
+                                        {% set definition_loop = loop %}
                                         {% if definition.partOfSpeech == "verb" %}
                                             {% set ns.verbIndex = loop.index - 1 %}
                                         {% endif %}
                                         <h5>- <i>{{ definition.partOfSpeech }}:</i></h5>
                                         {% for meaning in definition.meanings %}
-                                            <p class="card-text" style="text-indent: 30px"><b>{{outer_loop.index}}.{{ loop.index }}.:</b> {{meaning}}
+                                            <p class="card-text" style="text-indent: 30px"><b>{{definition_loop.index}}.{{ loop.index }}.:</b> {{meaning}}
                                         {% endfor %}
-                                        </p>   
+                                        </p>
                                     {% endfor %}
 
                                     {% if ns.verbIndex != -1 and word.definitions[ns.verbIndex].infinitive %}
-                                        <hr>                 
+                                        <hr id="card-infinitive-{{loop.index}}-hr">
 
-                                        <div id="card-infinitive" class="container">
+                                        <div id="card-infinitive-{{loop.index}}">
                                             <h6 class="card-title">Infinitive: <b>{{word.definitions[ns.verbIndex].infinitive.text}}</b></h6>
-                                            
+
                                             {% for meaning in word.definitions[ns.verbIndex].infinitive.meanings %}
                                                 <p class="card-text"><b>{{ loop.index }}.:</b> {{meaning}}</p>
                                             {% endfor %}

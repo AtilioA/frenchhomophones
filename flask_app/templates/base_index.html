@@ -1,10 +1,13 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=yes">
+
+    <meta name="description" content="A homophone is a word that has the same pronunciation of another word, but may have different spelling and meaning. Here you can discover and learn more about specific examples of homophones in the French language.">
+    <link href="https://www.frenchhomophones.tech/" rel="canonical" />
 
     <!-- CSS -->
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
@@ -79,7 +82,7 @@
                 </div>
 
                 <div id="main" class="card bg-dark text-light text-center mb-4">
-                    <img id="main" class="card-img img-fluid" src="../static/assets/Flag_of_La_Francophonie2.png"
+                    <img id="main" class="card-img img-fluid" src="../static/assets/Flag_of_La_Francophonie.png"
                         alt="Card image">
                     <div class="card-img-overlay">
                         <div class="row align-items-center" style="height: 65%">
@@ -98,7 +101,7 @@
                             </div>
                             <div class="row mx-1 my-2">
                                 {% for Homophone in homophonesLists %}
-                                <div class="col-md-12 col-lg-2 my-2 mx-auto">
+                                <div class="col-md-12 col-lg-3 my-2 mx-auto">
                                     <div id="random_homophones_card" class="card shadow-sm text-center hvr-grow-shadow">
                                         <div class="card-header text-center">
                                             <audio id="player{{loop.index0}}" src="{{audios[loop.index0]}}"></audio>
