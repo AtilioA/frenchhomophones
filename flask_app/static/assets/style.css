@@ -60,6 +60,11 @@ body {
 
 .navbar {
     background-color: #152E2B;
+    /* #1C2A37 */
+    /* background-color: #1C3337; */
+}
+
+#nav-page-navigation {
     /* background-color: #1C3337; */
 }
 
@@ -156,6 +161,10 @@ a.play_button{
 img.play_button {
     width: 48px;
     height: 48px;
+}
+
+h3.pronunciation {
+    font-family: "Times New Roman";
 }
 
 /* # sourceMappingURL=style.css.map */
