@@ -29,7 +29,7 @@
             <div class="container-fluid">
                 <a class="navbar-brand" href="/">French Homophones</a>
 
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSite">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSite" aria-label="Toggle navigation bar options">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
@@ -61,7 +61,7 @@
                                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> About </a>
                                 <div class="dropdown-menu dropdown-menu-right shadow rounded"
                                     aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="/#whatarehomophones">What are homophones?</a>
+                                    <a class="dropdown-item" href="/#what-are-homophones">What are homophones?</a>
                                     <a class="dropdown-item" href="/about">About the website</a>
                                 </div>
                             </li>
@@ -82,7 +82,7 @@
                 </div>
 
                 <div id="main" class="card bg-dark text-light text-center mb-4">
-                    <img id="main_bg_img" class="card-img img-fluid" src="../static/assets/Flag_of_La_Francophonie.png"
+                    <img id="main-bg-img" class="card-img img-fluid" src="../static/assets/Flag_of_La_Francophonie.png"
                         alt="Card image">
                     <div class="card-img-overlay">
                         <div class="row align-items-center" style="height: 65%">
@@ -102,17 +102,17 @@
                             <div class="row mx-1 my-2">
                                 {% for Homophone in homophonesLists %}
                                 <div class="col-md-12 col-lg-3 my-2 mx-auto">
-                                    <div id="random_homophones_card" class="card shadow-sm text-center hvr-grow-shadow">
+                                    <div id="card-random-homophone-{{loop.index}}" class="card shadow-sm text-center hvr-grow-shadow">
                                         <div class="card-header text-center">
-                                            <audio id="player{{loop.index}}" src="{{audios[loop.index0]}}"></audio>
+                                            <audio id="player{{loop.index0}}" src="{{audios[loop.index]}}"></audio>
                                             <div>
-                                                <a onclick="document.getElementById('player{{loop.index0}}').play()"><img
+                                                <a onclick="document.getElementById('player{{loop.index}}').play()"><img
                                                         src="../static/assets/materialicons_volume_up.svg" alt="Play"
-                                                        class="play_button"></a>
+                                                        class="play-button index"></a>
                                             </div>
                                         </div>
-                                        <a id="card_link_to_random_homophone"
-                                            alt="Link to the homophone group"
+                                        <a id="link-random-homophone"
+                                            alt="Link to the homophone group {{loop.index}}"
                                             href="/find?search={{Homophone.homophonesList[0]['word']}}">
                                             <div class="card-body">
                                                 <ul class="list-group list-group-flush">
@@ -153,16 +153,14 @@
                                                 title="Homograph_homophone_venn_diagram.png: Will Heltsley
                                             derivative work: Cmglee [CC BY-SA (https://creativecommons.org/licenses/by-sa/3.0)]"
                                                 src="../static/assets/Homograph_homophone_venn_diagram-min.png"
-                                                alt="Homograph homophone venn diagram" style="max-width:100%">
-                                            <figcaption class="center"><a
+                                                alt="Homograph homophone venn diagram" style="height:100%">
+                                            <figcaption class="card-img center"><a
                                                     href="https://commons.wikimedia.org/wiki/File:Homograph_homophone_venn_diagram.svg"
                                                     title="via Wikimedia Commons">Homograph_homophone_venn_diagram.png:
                                                     Will Heltsley derivative work: Cmglee</a> [<a
                                                     href="https://creativecommons.org/licenses/by-sa/3.0">CC
                                                     BY-SA</a>]
-                                                <p><sup>1</sup><a
-                                                        href="https://en.wikipedia.org/wiki/Homophone">Wikipedia</a>.
-                                                </p>
+                                                    <i><p><sup>1</sup><a href="https://en.wikipedia.org/wiki/Homophone">Wikipedia</a>.</p></i>
                                             </figcaption>
                                         </figure>
                             </div>
