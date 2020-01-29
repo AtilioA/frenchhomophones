@@ -15,9 +15,10 @@ MONGO_URI = os.environ.get("MONGO_URI")
 
 # Connects to database collection. Creates one if it doesn't exist
 client = MongoClient(MONGO_URI)
+print("Connected to database.")
 db = client.frenchhomophones
 homophonesCollection = db.homophones
-print("Connected to database.")
+homophonesGroupCollection = db.homophonesGroup
 
 
 def process_missing_homophone(Homophone):

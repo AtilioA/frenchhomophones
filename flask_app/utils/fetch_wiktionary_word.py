@@ -53,7 +53,7 @@ def fetch_wiktionary_word(word, isInfinitive=False):
 
             # # If IPA entry doesn't exist
             # if "Homophone" in parsedHomophone['pronunciations']['text'][0]:
-            #     # print("Doesn't have IPA, has Homophones")
+            #     # print("Doesn't have IPA, has homophones")
             #     parsedHomophone['pronunciations']['IPA'] = None
             #     parsedHomophone['pronunciations']['homophones'] = parsedHomophone['pronunciations']['text'][0].split(", ")
         except (IndexError, KeyError) as err:

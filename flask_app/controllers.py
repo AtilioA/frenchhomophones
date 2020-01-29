@@ -1,6 +1,8 @@
 import os
 import sys
 
+from .models import HomophonesGroup
+
 # Needed to execute this package as a script
 sys.path.append(os.path.join(os.path.dirname(__file__), os.path.pardir))
 
@@ -59,53 +61,6 @@ def create_homophones_list(userCollection, query="", random=False):
 
         homophonesList.append(wordQueryResult)
 
-    homophones = Homophones(homophonesList)
+    homophones = HomophonesGroup(homophonesList)
 
     return homophones
-
-
-class Homophones:
-    def __init__(self, homophonesList):
-        self.homophonesList = homophonesList
-
-        audio = self.determine_audio_URL()
-        # print(audio)
-        if isinstance(audio, list):
-            self.audio = audio[0]
-        else:
-            self.audio = audio
-
-        self.ipa = self.determine_ipa()
-
-    def determine_ipa(self):
-        """ Return IPA for list of homophones.
-
-            Return first IPA string from Wiktionary from the list of homophones.
-
-            If no IPA is available, return `None`
-        """
-
-        # Find any IPA string from list of homophones
-        for homophone in self.homophonesList:
-            if homophone['pronunciations']['IPA']:
-                ipa = homophone['pronunciations']['IPA']
-                # print(ipa)
-                return ipa
-        return None
-
-    def determine_audio_URL(self):
-        """ Return audio URL for list of homophones.
-
-            Return first audio file from Wiktionary from the list of homophones.
-
-            If no audio is available, request from google translate
-            (Request URL may break anytime).
-        """
-
-        # Find any audio file from list of homophones
-        # If not available, get from Google Translate (this URL may break anytime)
-        audio = f"//translate.google.com.vn/translate_tts?ie=&q={self.homophonesList[0]['word']}&tl=fr-fr&client=tw-ob"
-        for homophone in self.homophonesList:
-            if homophone['pronunciations']['audio']:
-                audio = homophone['pronunciations']['audio']
-        return audio
