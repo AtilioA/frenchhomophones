@@ -87,111 +87,103 @@
         <div class="homophones">
             <div class="container body-content">
                 <div class="container">
-                    <!-- Text section below navbar -->
-                    <div class="text my-4">
+                    <div class="text-center my-4">
+                        <h3>(WORK IN PROGRESS)</h3>
+                    </div>
                         <!-- Homophones' cards -->
-                        <div class="row my-2">
-                            {% for Homophones in homophonesLists %}
-                                {% for word in Homophones.homophonesList %}
-                                <div class="col-md-12 col-lg-3 my-2 mx-auto">
-                                    <div class="card shadow-sm">
-                                        <div class="card-body">
-                                            <h3 lang="fr" xml:lang="fr" class="card-title"><b>{{word.word}}</b></h3>
-                                            {% set ns = namespace(verbIndex = -1) %}
-                                            {% for definition in word.definitions %}
-                                            {% set definition_loop = loop %}
-                                            {% if definition.partOfSpeech == "verb" %}
-                                            {% set ns.verbIndex = loop.index - 1 %}
-                                            {% endif %}
-                                            <h5>- <i>{{ definition.partOfSpeech }}:</i></h5>
-                                            {% for meaning in definition.meanings %}
-                                            <p class="card-text" style="text-indent: 30px">
-                                                <b>{{definition_loop.index}}.{{ loop.index }}.:</b> {{meaning}}
-                                                {% endfor %}
-                                            </p>
-                                            {% endfor %}
-
-                                            {% if ns.verbIndex != -1 and word.definitions[ns.verbIndex].infinitive %}
-                                            <hr id="card-infinitive-{{loop.index}}-hr">
-
-                                            <div class="card-infinitive" id="card-infinitive-{{loop.index}}">
-                                                <h6 class="card-title">Infinitive:
-                                                    <b>{{word.definitions[ns.verbIndex].infinitive.text}}</b></h6>
-
-                                                {% for meaning in word.definitions[ns.verbIndex].infinitive.meanings %}
-                                                <p class="card-text"><b>{{ loop.index }}.:</b> {{meaning}}</p>
-                                                {% endfor %}
+                        <div class="col-sm-12 col-md-12 mt-4 my-2">
+                            <div class="card shadow-sm text-dark">
+                            <div class="row mx-1 my-2">
+                                {% for homophonesList in homophonesLists %}
+                                <div class="col-sm-12 col-lg-3 my-2 mx-auto">
+                                    <div id="card-random-homophone-{{loop.index}}" class="card shadow-sm text-center hvr-grow-shadow">
+                                        <a id="link-random-homophone"
+                                            alt="Link to the homophone group {{loop.index}}"
+                                            href="/find?search={{homophonesList[0]['word']}}">
+                                            <div class="card-body">
+                                                <ul class="list-group list-group-flush">
+                                                    {% for homophone in homophonesList %}
+                                                    <li class="list-group-item"><b>{{homophone.word}}</b></li>
+                                                    {% endfor %}
+                                                </ul>
                                             </div>
-                                            {% endif %}
-
-                                        </div>
                                     </div>
+                                    </a>
                                 </div>
                                 {% endfor %}
-                            {% endfor %}
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <nav id="nav-page-navigation" aria-label="Page navigation example">
-                <ul class="pagination justify-content-center">
-
-                {% if prevURL %}
-                <li class="page-item">
-                    <a class="page-link" href="/browse?offset={{offset - limit}}&limit={{limit}}" tabindex="-1">Previous</a>
-                  </li>
-                <li>
-                {% if (offset > limit + 1) %}
-                <li>
-                    <a class="page-link" href="/browse?offset=0&limit={{limit}}" tabindex="-1">1</a>
-                </li>
-                <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1">...</a></li>
-                {% endif %}
-                    <a class="page-link" href="/browse?offset={{offset - limit}}&limit={{limit}}" tabindex="-1">{{currentPage - 1}}</a>
-                </li>
-                {% endif %}
-
-                <li class="page-item active"><a class="page-link" href="#">{{currentPage}}</a></li>
-
-                {% if nextURL %}
-                <!-- If the next page isn't the last one -->
-                <!-- {{offset + limit}}
-                {{(totalPages * limit) - limit - 1}} -->
-                {% if (offset + limit) != ((totalPages * limit) - limit - 1) %}
-                <li class="page-item"><a class="page-link" href="/browse?offset={{offset + limit}}&limit={{limit}}">{{currentPage + 1}}</a></li>
-                <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1">...</a></li>
-                {% endif %}
-
-                <li class="page-item"><a class="page-link" href="/browse?offset={{(totalPages * limit) - limit - 1}}&limit={{limit}}">{{totalPages}}</a></li>
-                <li class="page-item">
-                <a class="page-link" href="/browse?offset={{offset + limit}}&limit={{limit}}">Next</a>
-                </li>
-                {% endif %}
-                </ul>
-            </nav>
-
-            <footer id="footer" class="py-3 bg-dark text-white-50">
-                <div class="container body-content">
-                    <div class="container">
-                        <span class="text-muted">Built by <a target="_blank" rel="noopener"
-                                href="https://github.com/AtilioA">AtilioA <i
-                                    class="icon-github-circled"></i></a>.</span>
-                    </div>
-                </div>
-            </footer>
-
-            <script src="../static/js/validateForm.js"></script>
-            <!-- Optional JavaScript -->
-            <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-            <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-                integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
-                crossorigin="anonymous"></script>
-
-            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
-                integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-                crossorigin="anonymous"></script>
         </div>
+
+        <nav id="nav-page-navigation" aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+
+            {% if prevURL %}
+            <li class="page-item">
+                <a class="page-link" href="/browse?offset={{offset - limit}}&limit={{limit}}" tabindex="-1">«</a>
+            </li>
+            <!-- If the previous page isn't the first one -->
+            {% if (offset > limit + 1) %}
+            <li>
+                <a class="page-link" href="/browse?offset=0&limit={{limit}}" tabindex="-1">1</a>
+            </li>
+            <li class="page-item disabled">
+                <a class="page-link" href="#" tabindex="-1">...</a>
+            </li>
+            {% endif %}
+            <li>
+                <a class="page-link" href="/browse?offset={{offset - limit}}&limit={{limit}}" tabindex="-1">{{currentPage - 1}}</a>
+            </li>
+            {% endif %}
+
+            <li class="page-item active"><a class="page-link" href="#">{{currentPage}}</a></li>
+
+            {% if nextURL %}
+            <!-- If the next page isn't the last one -->
+            {% if (offset + limit) != ((totalPages * limit) - limit - 1) %}
+            <li class="page-item">
+                <a class="page-link" href="/browse?offset={{offset + limit}}&limit={{limit}}">{{currentPage + 1}}</a>
+                </li>
+            <li class="page-item disabled">
+                <a class="page-link" href="#" tabindex="-1">...</a>
+            </li>
+            {% endif %}
+
+            <li class="page-item">
+                <a class="page-link" href="/browse?offset={{(totalPages * limit) - limit - 1}}&limit={{limit}}">{{totalPages}}</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="/browse?offset={{offset + limit}}&limit={{limit}}">»</a>
+            </li>
+            {% endif %}
+
+            </ul>
+        </nav>
+
+        </div>
+
+        <footer id="footer" class="py-3 bg-dark text-white-50">
+            <div class="container body-content">
+                <div class="container">
+                    <span class="text-muted">Built by <a target="_blank" rel="noopener" href="https://github.com/AtilioA">AtilioA <i
+                                class="icon-github-circled"></i></a>.</span>
+                </div>
+            </div>
+        </footer>
+
+        <script src="../static/js/validateForm.js"></script>
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Bootstrap JS -->
+        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+            integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+            crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+            integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+            crossorigin="anonymous"></script>
+    </div>
 </body>
 
 </html>

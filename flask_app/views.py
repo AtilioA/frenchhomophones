@@ -11,6 +11,7 @@ MONGO_URI = os.environ.get("MONGO_URI")
 client = MongoClient(MONGO_URI)
 db = client.frenchhomophones
 userCollection = db.homophones
+groupCollection = db.homophonesGroup
 
 @views.route('/<path:urlpath>/', methods=['GET', 'POST'])  # Catch all undefined routes
 @views.route('/', methods=['GET'])
@@ -57,7 +58,7 @@ def about():
 
 @views.route("/h/<homophoneID>", methods=['GET'])
 def h(homophoneID):
-    """ Homophones's pages route """
+    """ Homophones' pages route """
 
     print(homophoneID)
     # print(homophoneID.isdigit())
@@ -89,18 +90,22 @@ def robots():
     return send_from_directory("static", "robots.txt")
 
 
-def determine_pagination_urls(offset, limit):
+def determine_pagination_variables(offset, limit):
     if offset - limit < 0:
         prevURL = None
     else:
         prevURL = f'/p/?limit={limit}&offset={offset - limit}'
 
-    if offset + limit >= userCollection.count_documents({}):
+    totalDocuments = groupCollection.count_documents({})
+    if offset + limit >= totalDocuments:
         nextURL = None
     else:
         nextURL = f'/p/?limit={limit}&offset={offset + limit}'
+    
+    totalPages = (totalDocuments // limit) + 1
+    currentPage = (offset // limit) + 1
 
-    return (prevURL, nextURL)
+    return (prevURL, nextURL, totalPages, currentPage)
 
 
 @views.route("/browse")
@@ -112,20 +117,13 @@ def browse():
         limit = 12
         offset = 0
 
-    nthDocument = find_nth_document(userCollection, offset)
+    nthDocument = find_nth_document(groupCollection, offset)
     nthID = nthDocument['_id']
 
-    homophonesLists = []
-    words = userCollection.find({'_id': {'$gte': nthID}}).limit(limit)
-    for i in range(limit):
-        try:
-            homophonesLists.append(create_homophones_list(userCollection, query=words[i]["word"]))
-        except IndexError:
-            pass
-    print(homophonesLists)
+    words = list(map(lambda x: x['homophones'], groupCollection.find({'_id': {'$gte': nthID}}).limit(limit)))
+    print(words)
+    print(type(words))
 
-    totalPages = (userCollection.count_documents({}) // limit) + 1
-    currentPage = (offset // limit) + 1
-    prevURL, nextURL = determine_pagination_urls(offset, limit)
+    prevURL, nextURL, totalPages, currentPage = determine_pagination_variables(offset, limit)
 
-    return render_template("browse.html", offset=offset, limit=limit, prevURL=prevURL, nextURL=nextURL, totalPages=totalPages, currentPage=currentPage, homophonesLists=homophonesLists)
+    return render_template("browse.html", offset=offset, limit=limit, prevURL=prevURL, nextURL=nextURL, totalPages=totalPages, currentPage=currentPage, homophonesLists=words)
