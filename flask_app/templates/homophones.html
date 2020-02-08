@@ -5,36 +5,36 @@
 {%- if loop.last %} and {{ word.word }}
 {%- elif loop.index == homophones|length - 1 %} {{word.word}}
 {%- else -%}
-    {{ word.word }},
+  {{ word.word }},
 {%- endif -%}
 {%- endfor %} - French Homophones
 {%- endblock -%}
 
 {% block homophones_h2 %}
-    {%- for word in homophones -%}
-        {%- if loop.last %} {{ word.word }}
-        {%- else %} {{ word.word }},
-        {%- endif -%}
-    {%- endfor %}
+  {%- for word in homophones -%}
+      {%- if loop.last %} {{ word.word }}
+      {%- else %} {{ word.word }},
+      {%- endif -%}
+  {%- endfor %}
 {% endblock %}
 {% block homophones_h3_pronunciation %}
-    <audio id="player" src="{{audio}}" type="audio"></audio>
-    <div>
-        {% if ipa %}
-        {{ipa}}
-        {% endif %}
-        <a onclick="document.getElementById('player').play()"><img src="../static/assets/materialicons_volume_up.svg" alt="Play" id="play-button">
-        </a>
-    </div>
+  <audio id="player" src="{{audio}}" type="audio"></audio>
+  <div>
+      {% if ipa %}
+      {{ipa}}
+      {% endif %}
+      <a onclick="document.getElementById('player').play()"><img src="../static/assets/materialicons_volume_up.svg" alt="Play" id="play-button">
+      </a>
+  </div>
 {% endblock %}
 
 
 {% block homophones_h5 %}
-    {%- for word in homophones -%}
-        {%- if loop.last %} and {{ word.word }}
-        {%- elif loop.index == homophones|length - 1 %} {{word.word}}
-        {%- else -%}
-            {{ word.word }},
-        {%- endif -%}
-    {%- endfor -%}
+  {%- for word in homophones -%}
+      {%- if loop.last %} and {{ word.word }}
+      {%- elif loop.index == homophones|length - 1 %} {{word.word}}
+      {%- else -%}
+          {{ word.word }},
+      {%- endif -%}
+  {%- endfor -%}
 {% endblock %}

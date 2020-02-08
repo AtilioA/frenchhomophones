@@ -2,107 +2,108 @@
 <html lang="en">
 
 <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta
-        name="Description"
-        content="The about section of the website French Homophone tells more about the web application and has a link to contribute on GitHub.">
-    <link href="https://www.frenchhomophones.tech/about" rel="canonical" />
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="Description"
+		content="The about section of the website French Homophone tells more about the web application and has a link to contribute on GitHub.">
+	<link href="https://www.frenchhomophones.tech/about" rel="canonical" />
 
-    <!-- CSS -->
-    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+	<!-- CSS -->
+	<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
 
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+		integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
-    <link rel="stylesheet" href="../static/assets/style.css">
-    <link rel="stylesheet" href="../static/assets/icons.css">
+	<link rel="stylesheet" href="../static/assets/style.css">
+	<link rel="stylesheet" href="../static/assets/icons.css">
 
-    <title>
-        {% block title %}{% endblock %}
-    </title>
+	<title>
+		{% block title %}{% endblock %}
+	</title>
 </head>
 
 <body>
-    <header>
-        <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="/">French Homophones</a>
+	<header>
+		<nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+			<div class="container-fluid">
+				<a class="navbar-brand" href="/">French Homophones</a>
 
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSite" aria-label="Toggle navigation bar options">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSite"
+					aria-label="Toggle navigation bar options">
+					<span class="navbar-toggler-icon"></span>
+				</button>
 
-                <div class="navbar-collapse collapse" id="navbarSite">
-                    <a href="/random" class="btn btn-success btn-sm my-1 my-xs-0">
-                        Random
-                        <span class="icon-shuffle randomIcon"></span>
-                    </a>
-                    <a href="/browse" class="btn btn-info btn-sm mx-1 mx-xs-0 my-1 my-xs-0 ml-lg-2">
-                        Browse by letter
-                        <span class="icon-font-1 browseIcon"></span>
-                    </a>
+				<div class="navbar-collapse collapse" id="navbarSite">
+					<a href="/random" class="btn btn-success btn-sm my-1 my-xs-0">
+						Random
+						<span class="icon-shuffle randomIcon"></span>
+					</a>
+					<a href="/browse" class="btn btn-info btn-sm mx-1 mx-xs-0 my-1 my-xs-0 ml-lg-2">
+						Browse by letter
+						<span class="icon-font-1 browseIcon"></span>
+					</a>
 
-                    <div class="d-inline-flex bd-highlight justify-content-center text-nowrap ml-auto mr-2">
-                        <form name="searchForm" class="form-inline my-0 my-lg-0 mt-2 my-lg-0 ml-auto" action="/find"
-                            method="GET" onsubmit="return validateForm()">
-                            <input class="form-control mr-sm-1 my-lg-0 my-sm-0 my-2" name="search" type="search"
-                                placeholder="Word" aria-label="Search" required>
-                                <button class="btn btn-outline-success mr-auto my-lg-0 mx-md-0" type="submit">Search
-                                homophone</button>
-                        </form>
-                    </div>
+					<div class="d-inline-flex bd-highlight justify-content-center text-nowrap ml-auto mr-2">
+						<form name="searchForm" class="form-inline my-0 my-lg-0 mt-2 my-lg-0 ml-auto" action="/find" method="GET"
+							onsubmit="return validateForm()">
+							<input class="form-control mr-sm-1 my-lg-0 my-sm-0 my-2" name="search" type="search" placeholder="Word"
+								aria-label="Search" required>
+							<button class="btn btn-outline-success mr-auto my-lg-0 mx-md-0" type="submit">Search
+								homophone</button>
+						</form>
+					</div>
 
-                    <div class="dropdown" id="navbarNavDropdown">
-                        <ul class="navbar-nav my-lg-0 mt-2 my-0 ml-lg-3">
-                            <!-- About dropdown -->
-                            <li class="nav-item dropdown ml-xs-auto">
-                                <a class="nav-link dropdown-toggle" href="#" id="dropdownSite" role="button"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> About </a>
-                                <div class="dropdown-menu dropdown-menu-right shadow rounded"
-                                    aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="/#what-are-homophones">What are homophones?</a>
-                                    <a class="dropdown-item" href="/about">About the website</a>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-        </nav>
-    </header>
+					<div class="dropdown" id="navbarNavDropdown">
+						<ul class="navbar-nav my-lg-0 mt-2 my-0 ml-lg-3">
+							<!-- About dropdown -->
+							<li class="nav-item dropdown ml-xs-auto">
+								<a class="nav-link dropdown-toggle" href="#" id="dropdownSite" role="button" data-toggle="dropdown"
+									aria-haspopup="true" aria-expanded="false"> About </a>
+								<div class="dropdown-menu dropdown-menu-right shadow rounded" aria-labelledby="navbarDropdown">
+									<a class="dropdown-item" href="/#what-are-homophones">What are
+										homophones?</a>
+									<a class="dropdown-item" href="/about">About the
+										website</a>
+								</div>
+							</li>
+						</ul>
+					</div>
+				</div>
+		</nav>
+	</header>
 
-    <div id="app">
-        <div class="homophones">
-            <div class="container body-content">
-                <div class="container">
-                    <div class="text my-auto">
-                        <h3><b>{% block body_content_title %}{% endblock %}</b></h3>
-                        <p>{% block body_content_text %}{% endblock %}</p>
-                    </div>
-                </div>
-            </div>
-        </div>
+	<div id="app">
+		<div class="homophones">
+			<div class="container body-content">
+				<div class="container">
+					<div class="text my-auto">
+						<h3><b>{% block body_content_title %}{% endblock %}</b></h3>
+						<p>{% block body_content_text %}{% endblock %}</p>
+					</div>
+				</div>
+			</div>
+		</div>
 
-    <footer id="footer" class="py-3 bg-dark text-white-50">
-        <div class="container body-content">
-            <div class="container">
-                <span class="text-muted">Built by <a target="_blank" rel="noopener" href="https://github.com/AtilioA">AtilioA <i
-                            class="icon-github-circled"></i></a>.</span>
-            </div>
-        </div>
-    </footer>
+		<footer id="footer" class="py-3 bg-dark text-white-50">
+			<div class="container body-content">
+				<div class="container">
+					<span class="text-muted">Built by <a target="_blank" rel="noopener" href="https://github.com/AtilioA">AtilioA
+							<i class="icon-github-circled"></i></a>.</span>
+				</div>
+			</div>
+		</footer>
 
-    <script src="../static/js/validateForm.js"></script>
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
-        crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
-        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-        crossorigin="anonymous"></script>
-    </div>
+		<script src="../static/js/validateForm.js"></script>
+		<!-- Optional JavaScript -->
+		<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+		<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+			integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+			crossorigin="anonymous"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+			integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+			crossorigin="anonymous"></script>
+	</div>
 </body>
 
 </html>
