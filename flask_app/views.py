@@ -1,27 +1,32 @@
-from pymongo import MongoClient
 import os
 
+from pymongo import MongoClient
 from flask import Blueprint, render_template, send_from_directory, request, redirect, jsonify
 
-from .controllers import create_homophones_list, find_nth_document, find_one_random_document
+from .controllers import create_homophones_list, find_nth_document, find_one_random_document, get_current_browse_page_homophones, define_limit_offset, define_pagination_variables
 
 views = Blueprint('views', __name__)
-MONGO_URI = os.environ.get("MONGO_URI")
 
+MONGO_URI = os.environ.get("MONGO_URI")
 client = MongoClient(MONGO_URI)
 db = client.frenchhomophones
-userCollection = db.homophones
-groupCollection = db.homophonesGroup
+homophonesCollection = db.homophones  # Will be replaced by homophonesGroupColection
+homophonesGroupCollection = db.homophonesGroup
 
-@views.route('/<path:urlpath>/', methods=['GET', 'POST'])  # Catch all undefined routes
+INDEX_N_RANDOM_HOMOPHONES = 4  # Number of random homophones groups shown at homepage
+
+
+# Catch all undefined routes
+@views.route('/<path:urlpath>/', methods=['GET', 'POST'])
 @views.route('/', methods=['GET'])
 def index(urlpath='/'):
     """ Homepage of the web application. """
 
     homophonesLists = []
     audiosList = []
-    for i in range(4):
-        homophonesLists.append(create_homophones_list(userCollection=userCollection, random=True))
+    for i in range(INDEX_N_RANDOM_HOMOPHONES):
+        homophonesLists.append(create_homophones_list(
+            homophonesCollection=homophonesCollection, random=True))
         audiosList.append(homophonesLists[i].audio)
 
     return render_template("index.html", homophonesLists=homophonesLists, audios=audiosList)
@@ -39,9 +44,10 @@ def find(query=""):
 def random_route():
     """ Retrieve random document from database to be shown to the user. """
 
-    randomHomophone = find_one_random_document(userCollection)
-    print(randomHomophone)
+    randomHomophone = find_one_random_document(homophonesCollection)
+    # print(randomHomophone)
 
+	# STUB: WILL BE REFACTORED
     query = randomHomophone['word'].lower()
 
     for string in randomHomophone['pronunciations']['homophones']:
@@ -56,14 +62,15 @@ def about():
     return render_template("about.html")
 
 
+# STUB: WILL BE REFACTORED
 @views.route("/h/<homophoneID>", methods=['GET'])
 def h(homophoneID):
     """ Homophones' pages route """
 
-    print(homophoneID)
+    # print(homophoneID)
     # print(homophoneID.isdigit())
     if homophoneID.isdigit():
-        nthDocument = find_nth_document(userCollection, int(homophoneID))
+        nthDocument = find_nth_document(homophonesCollection, int(homophoneID))
         # print(nthDocument['word'])
         if nthDocument:
             wordRoute = nthDocument['word']
@@ -77,53 +84,26 @@ def h(homophoneID):
     else:
         homophoneID = homophoneID.split("-")[0]
         # print(homophoneID)
-        homophones = create_homophones_list(userCollection=userCollection, query=homophoneID)
+        homophones = create_homophones_list(
+            homophonesCollection=homophonesCollection, query=homophoneID)
         if not homophones:
             return render_template("notfound.html", word=homophoneID)
 
         return render_template("homophones.html", homophones=homophones.homophonesList, audio=homophones.audio, ipa=homophones.ipa)
 
 
+@views.route("/browse")
+def browse():
+	limit, offset = define_limit_offset(request)
+
+	homophones = get_current_browse_page_homophones(homophonesGroupCollection, limit, offset)
+
+	prevURL, nextURL, totalPages, currentPage = define_pagination_variables(limit, offset, homophonesGroupCollection=homophonesGroupCollection)
+
+	return render_template("browse.html", limit=limit, offset=offset, prevURL=prevURL, nextURL=nextURL, totalPages=totalPages, currentPage=currentPage, homophonesLists=homophones)
+
+
 @views.route("/robots.txt/")
 def robots():
     """ Send robots.txt. """
     return send_from_directory("static", "robots.txt")
-
-
-def determine_pagination_variables(offset, limit):
-    if offset - limit < 0:
-        prevURL = None
-    else:
-        prevURL = f'/p/?limit={limit}&offset={offset - limit}'
-
-    totalDocuments = groupCollection.count_documents({})
-    if offset + limit >= totalDocuments:
-        nextURL = None
-    else:
-        nextURL = f'/p/?limit={limit}&offset={offset + limit}'
-    
-    totalPages = (totalDocuments // limit) + 1
-    currentPage = (offset // limit) + 1
-
-    return (prevURL, nextURL, totalPages, currentPage)
-
-
-@views.route("/browse")
-def browse():
-    if request.args:
-        limit = int(request.args['limit'])
-        offset = int(request.args['offset'])
-    else:
-        limit = 12
-        offset = 0
-
-    nthDocument = find_nth_document(groupCollection, offset)
-    nthID = nthDocument['_id']
-
-    words = list(map(lambda x: x['homophones'], groupCollection.find({'_id': {'$gte': nthID}}).limit(limit)))
-    print(words)
-    print(type(words))
-
-    prevURL, nextURL, totalPages, currentPage = determine_pagination_variables(offset, limit)
-
-    return render_template("browse.html", offset=offset, limit=limit, prevURL=prevURL, nextURL=nextURL, totalPages=totalPages, currentPage=currentPage, homophonesLists=words)

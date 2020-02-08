@@ -7,60 +7,111 @@ from .models import HomophonesGroup
 sys.path.append(os.path.join(os.path.dirname(__file__), os.path.pardir))
 
 
-def find_one_random_document(userCollection):
-    cursor = userCollection.aggregate([
-        { "$sample": { "size": 1 } }
-    ])
+def define_limit_offset(request):
+	""" Define limit and offset variables from request.args """
 
-    return list(cursor)[0]
+	if request.args:
+		try:
+			limit = int(request.args['limit'])
+			offset = int(request.args['offset'])
+		except:
+			# Default limit and offset
+			limit = 12
+			offset = 0
+	else:
+		# Default limit and offset
+		limit = 12
+		offset = 0
+
+	return (limit, offset)
 
 
-def find_nth_document(userCollection, n):
-    """ Return nth document from database (insertion order). """
+def get_current_browse_page_homophones(homophonesGroupCollection, limit, offset):
+	""" Return list of homophones to be shown at the browse page, the latter determined by the limit and offset. """
 
-    return userCollection.find_one(skip=n)
+	nthDocument = find_nth_document(homophonesGroupCollection, offset)
+	nthID = nthDocument['_id']
+	documentsAfterNthDocument = homophonesGroupCollection.find(
+		{'_id': {'$gte': nthID}}).limit(limit)
+	homophones = list(map(lambda x: x['homophones'], documentsAfterNthDocument))
+
+	return homophones
 
 
-def create_homophones_list(userCollection, query="", random=False):
-    """ Return Homophone object with queried word (if applicable) and its homophones.
+def define_pagination_variables(limit, offset, homophonesGroupCollection):
+	""" Define previous URL, next URL, total number of pages and current page based
+	on the limit and offset. """
 
-        Until infinitive forms are stored in the database,
-        will look up with WiktionaryParser during execution.
+	if offset - limit < 0:
+		prevURL = None
+	else:
+		prevURL = f'/p/?limit={limit}&offset={offset - limit}'
 
-        Optional keyword arguments:
+	totalDocuments = homophonesGroupCollection.count_documents({})
+	if offset + limit >= totalDocuments:
+		nextURL = None
+	else:
+		nextURL = f'/p/?limit={limit}&offset={offset + limit}'
 
-        `random`: will use a random homophone as starting point
-        if set to `True`.
-    """
+	totalPages = (totalDocuments // limit) + 1
+	currentPage = (offset // limit) + 1
 
-    homophonesList = []
+	return (prevURL, nextURL, totalPages, currentPage)
 
-    if random:
-        homophone = find_one_random_document(userCollection)
-        # print(homophone)
-    else:
-        homophone = userCollection.find_one({"word": query.strip()})
-        if homophone is None:
-            return None
 
-    # Create list querying all homophones
-    homophonesList.append(homophone)
-    print(homophone)
-    for otherHomophone in homophone['pronunciations']['homophones']:
-        try:
-            # print(f"Querying {otherHomophone.strip()}...")
-            wordQueryResult = userCollection.find_one(
-                {"word": otherHomophone})
-            # print(f"query: {wordQueryResult}")
-        except TypeError:  # If the query return None
-            wordQueryResult = None
+def find_one_random_document(homophonesGroupCollection):
+	""" Return random document from database """
 
-        # If didn't find in the database, proceed to next iteration
-        if not wordQueryResult:
-            continue
+	cursor = homophonesGroupCollection.aggregate([
+		{ "$sample": { "size": 1 } }
+	])
 
-        homophonesList.append(wordQueryResult)
+	return list(cursor)[0]
 
-    homophones = HomophonesGroup(homophonesList)
 
-    return homophones
+def find_nth_document(homophonesGroupCollection, n):
+	""" Return nth document from database (insertion order). """
+
+	return homophonesGroupCollection.find_one(skip=n)
+
+
+def create_homophones_list(homophonesCollection, query="", random=False):
+	""" Return Homophone object with queried word (if applicable) and its homophones.
+
+		Optional keyword arguments:
+
+		`random`: will use a random homophone as starting point
+		if set to `True`.
+	"""
+
+	homophonesList = []
+
+	if random:
+		homophone = find_one_random_document(homophonesCollection)
+		# print(homophone)
+	else:
+		homophone = homophonesCollection.find_one({"word": query.strip()})
+		if homophone is None:
+			return None
+
+	# Create list querying all homophones
+	homophonesList.append(homophone)
+	# print(homophone)
+	for otherHomophone in homophone['pronunciations']['homophones']:
+		try:
+			# print(f"Querying {otherHomophone.strip()}...")
+			wordQueryResult = homophonesCollection.find_one(
+				{"word": otherHomophone})
+			# print(f"query: {wordQueryResult}")
+		except TypeError:  # If the query return None
+			wordQueryResult = None
+
+		# If didn't find in the database, proceed to next iteration
+		if not wordQueryResult:
+			continue
+
+		homophonesList.append(wordQueryResult)
+
+	homophones = HomophonesGroup(homophonesList)
+
+	return homophones

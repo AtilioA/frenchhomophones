@@ -49,31 +49,5 @@ class HomophonesGroup:
             return audio
 
 
-### OLD
-class Pronunciations(me.EmbeddedDocument):
-    text = me.ListField()
-    audio = me.ListField()
-
-
-class RelatedWords(me.EmbeddedDocument):
-    relationshipType = me.StringField()
-    words = me.ListField()
-
-
-class Definitions(me.EmbeddedDocument):
-    partOfSpeech = me.StringField(required=True)
-    text = me.ListField()
-    relatedWords = me.EmbeddedDocumentListField(RelatedWords)
-    examples = me.ListField()
-
-
-class Word(me.Document):
-    etymology = me.StringField()
-    definitions = me.EmbeddedDocumentListField(Definitions, required=True)
-    pronunciations = me.EmbeddedDocumentField(Pronunciations, required=True)
-###
-
 if __name__ == "__main__":
-    lista = []
-    homophones = HomophonesGroup(lista)
     pass
