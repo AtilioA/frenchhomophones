@@ -13,7 +13,7 @@ db = client.frenchhomophones
 homophonesCollection = db.homophones  # Will be replaced by homophonesGroupColection
 homophonesGroupCollection = db.homophonesGroup
 
-INDEX_N_RANDOM_HOMOPHONES = 4  # Number of random homophones groups shown at homepage
+HOMEPAGE_N_RANDOM_HOMOPHONES = 4  # Number of random homophones groups shown at homepage
 
 
 # Catch all undefined routes
@@ -24,7 +24,7 @@ def index(urlpath='/'):
 
     homophonesLists = []
     audiosList = []
-    for i in range(INDEX_N_RANDOM_HOMOPHONES):
+    for i in range(HOMEPAGE_N_RANDOM_HOMOPHONES):
         homophonesLists.append(create_homophones_list(
             homophonesCollection=homophonesCollection, random=True))
         audiosList.append(homophonesLists[i].audio)
@@ -94,13 +94,15 @@ def h(homophoneID):
 
 @views.route("/browse")
 def browse():
-	limit, offset = define_limit_offset(request)
+    """ Browse pages (pagination) route """
 
-	homophones = get_current_browse_page_homophones(homophonesGroupCollection, limit, offset)
+    limit, offset = define_limit_offset(request)
 
-	prevURL, nextURL, totalPages, currentPage = define_pagination_variables(limit, offset, homophonesGroupCollection=homophonesGroupCollection)
+    homophones = get_current_browse_page_homophones(homophonesGroupCollection, limit, offset)
 
-	return render_template("browse.html", limit=limit, offset=offset, prevURL=prevURL, nextURL=nextURL, totalPages=totalPages, currentPage=currentPage, homophonesLists=homophones)
+    prevURL, nextURL, totalPages, currentPage = define_pagination_variables(limit, offset, homophonesGroupCollection=homophonesGroupCollection)
+
+    return render_template("browse.html", limit=limit, offset=offset, prevURL=prevURL, nextURL=nextURL, totalPages=totalPages, currentPage=currentPage, homophonesLists=homophones)
 
 
 @views.route("/robots.txt/")
