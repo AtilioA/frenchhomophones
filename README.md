@@ -1,5 +1,8 @@
 <h1 align="center">
-  	<a href="http://www.frenchhomophones.tech">🌐 frenchhomophones.tech</a>
+  	<a href="http://www.frenchhomophones.tech">
+		<img src=".github/FrenchHomophonesIcon.png" width=20%">
+		<br/>
+	 	🌐 frenchhomophones.tech</a>
 </h1>
 
 <h4 align="center">
@@ -28,8 +31,6 @@ First, clone the repository and create a virtual environment for the project (to
 `pipenv install` - Create virtual environment and install dependencies
 
 `pipenv shell` - Activate virtual environment
-
-
 
 Some of the bot's functionality depends on being connected to a MongoDB database. If you wish to use your own database, just set the `MONGO_URI` environment variable in the `.env.example` file to your URI connection string and rename the `.env.example` file to `.env` or, alternatively, set `MONGO_URI` as an environment variable of the system hosting the application.
 
