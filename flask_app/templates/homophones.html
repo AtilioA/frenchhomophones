@@ -34,7 +34,7 @@
       {%- if loop.last %} and {{ word.word }}
       {%- elif loop.index == homophones|length - 1 %} {{word.word}}
       {%- else -%}
-          {{ word.word }},
+          {{ word.word }}, 
       {%- endif -%}
   {%- endfor -%}
 {% endblock %}
