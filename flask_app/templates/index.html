@@ -6,6 +6,9 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=yes">
 
+	<script data-ad-client="ca-pub-4148853721557415" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
 	<meta name="description"
 		content="A homophone is a word that has the same pronunciation of another word, but may have different spelling and meaning. Here you can discover and learn more about specific examples of homophones in the French language.">
 	<link href="http://www.frenchhomophones.tech/" rel="canonical" />
@@ -102,28 +105,28 @@
 							</div>
 							<div class="row mx-1 my-2">
 								{% for Homophone in homophonesLists %}
-									<div class="col-md-12 col-lg-3 my-2 mx-auto">
-										<div id="card-random-homophone-{{loop.index}}" class="card shadow-sm text-center hvr-grow-shadow">
-											<div class="card-header text-center">
-												<audio id="player{{loop.index}}" src="{{audios[loop.index0]}}"></audio>
-												<div>
-													<a onclick="document.getElementById('player{{loop.index}}').play()"><img
-															src="../static/assets/materialicons_volume_up.svg" alt="Play"
-															class="play-button index{{loop.index}}"></a>
-												</div>
+								<div class="col-md-12 col-lg-3 my-2 mx-auto">
+									<div id="card-random-homophone-{{loop.index}}" class="card shadow-sm text-center hvr-grow-shadow">
+										<div class="card-header text-center">
+											<audio id="player{{loop.index}}" src="{{audios[loop.index0]}}"></audio>
+											<div>
+												<a onclick="document.getElementById('player{{loop.index}}').play()"><img
+														src="../static/assets/materialicons_volume_up.svg" alt="Play"
+														class="play-button index{{loop.index}}"></a>
 											</div>
-											<a id="link-random-homophone" alt="Link to the homophone group {{loop.index}}"
-												href="/find?search={{Homophone.homophonesList[0]['word']}}">
-												<div class="card-body">
-													<ul class="list-group list-group-flush">
-														{% for homophone in Homophone.homophonesList %}
-															<li class="list-group-item"><b>{{homophone.word}}</b></li>
-														{% endfor %}
-													</ul>
-												</div>
 										</div>
-										</a>
+										<a id="link-random-homophone" alt="Link to the homophone group {{loop.index}}"
+											href="/find?search={{Homophone.homophonesList[0]['word']}}">
+											<div class="card-body">
+												<ul class="list-group list-group-flush">
+													{% for homophone in Homophone.homophonesList %}
+													<li class="list-group-item"><b>{{homophone.word}}</b></li>
+													{% endfor %}
+												</ul>
+											</div>
 									</div>
+									</a>
+								</div>
 								{% endfor %}
 							</div>
 							<div class="card-footer text-muted">
@@ -142,7 +145,10 @@
 								<h4 class="card-title">What are homophones?<sup>1</sup></h4>
 								<h6>"Homophone" derives from the Greek <i>homo-</i>, "same", and <i>phōnḗ</i>,
 									"voice", "utterance".<h6>
-										<h6>A homophone is a word that is pronounced the same (to varying extent) as another word but differs in meaning. A homophone may also differ in spelling. Homophones that are spelled the same are also both homographs and homonyms. Homophones that are spelled differently are also called heterographs.</h6>
+										<h6>A homophone is a word that is pronounced the same (to varying extent) as another word but
+											differs in meaning. A homophone may also differ in spelling. Homophones that are spelled the same
+											are also both homographs and homonyms. Homophones that are spelled differently are also called
+											heterographs.</h6>
 										<figure>
 											<img class="card-img center"
 												title="Homograph_homophone_venn_diagram.png: Will Heltsley
