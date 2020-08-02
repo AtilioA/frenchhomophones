@@ -1,6 +1,6 @@
 function validateForm() {
-    var x = document.forms["searchForm"]["search"].value;
-    if (x.trim() === "") {
+    var searchInput = document.forms["searchForm"]["search"].value;
+    if (searchInput.trim() === "") {
         alert("You must enter a word!");
         return false;
     }

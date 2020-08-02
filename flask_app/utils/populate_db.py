@@ -1,6 +1,4 @@
 import os
-import time
-import urllib.parse
 from pymongo import MongoClient
 # To read dictionaries from txt
 from ast import literal_eval

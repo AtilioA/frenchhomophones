@@ -1,7 +1,7 @@
 import os
 
 from pymongo import MongoClient
-from flask import Blueprint, render_template, send_from_directory, request, redirect, jsonify
+from flask import Blueprint, render_template, send_from_directory, request, redirect
 
 from .controllers import create_homophones_list, find_nth_document, find_one_random_document, get_current_browse_page_homophones, define_limit_offset, define_pagination_variables
 
@@ -47,7 +47,7 @@ def random_route():
     randomHomophone = find_one_random_document(homophonesCollection)
     # print(randomHomophone)
 
-	# STUB: WILL BE REFACTORED
+    # STUB: SHOULD BE REFACTORED
     query = randomHomophone['word'].lower()
 
     for string in randomHomophone['pronunciations']['homophones']:
@@ -62,7 +62,7 @@ def about():
     return render_template("about.html")
 
 
-# STUB: WILL BE REFACTORED
+# STUB: SHOULD BE REFACTORED
 @views.route("/h/<homophoneID>", methods=['GET'])
 def h(homophoneID):
     """ Homophones' pages route """
@@ -100,7 +100,8 @@ def browse():
 
     homophones = get_current_browse_page_homophones(homophonesGroupCollection, limit, offset)
 
-    prevURL, nextURL, totalPages, currentPage = define_pagination_variables(limit, offset, homophonesGroupCollection=homophonesGroupCollection)
+    prevURL, nextURL, totalPages, currentPage = define_pagination_variables(
+        limit, offset, homophonesGroupCollection=homophonesGroupCollection)
 
     return render_template("browse.html", limit=limit, offset=offset, prevURL=prevURL, nextURL=nextURL, totalPages=totalPages, currentPage=currentPage, homophonesLists=homophones)
 
