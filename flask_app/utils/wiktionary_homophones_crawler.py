@@ -8,7 +8,7 @@ if __name__ == "__main__":
     currentPage = 1
 
     # Open text file to write homophones
-    with open(f"french_homophones.txt", "a+", encoding="utf8") as f:
+    with open("french_homophones.txt", "a+", encoding="utf8") as f:
         # Initialize headers for GET request
         headers = {
             'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36'}
