@@ -1,8 +1,8 @@
 <h1 align="center">
-  	<a href="http://www.frenchhomophones.tech">
+  	<a href="https://frenchhomophones.herokuapp.com/">
 		<img src=".github/FrenchHomophonesIcon.png" width=20%">
 		<br/>
-	 	🌐 frenchhomophones.tech</a>
+	 	🇫🇷 frenchhomophones
 </h1>
 
 <h4 align="center">
