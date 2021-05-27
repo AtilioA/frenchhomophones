@@ -108,12 +108,14 @@
 								<div class="col-md-12 col-lg-3 my-2 mx-auto">
 									<div id="card-random-homophone-{{loop.index}}" class="card shadow-sm text-center hvr-grow-shadow">
 										<div class="card-header text-center">
+											<!-- {% if audios %} -->
 											<audio id="player{{loop.index}}" src="{{audios[loop.index0]}}"></audio>
 											<div>
 												<a onclick="document.getElementById('player{{loop.index}}').play()"><img
 														src="../static/assets/materialicons_volume_up.svg" alt="Play"
 														class="play-button index{{loop.index}}"></a>
 											</div>
+											<!-- {% endif %} -->
 										</div>
 										<a id="link-random-homophone" alt="Link to the homophone group {{loop.index}}"
 											href="/find?search={{Homophone.homophonesList[0]['word']}}">
