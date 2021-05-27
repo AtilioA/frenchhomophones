@@ -32,7 +32,7 @@ First, clone the repository and create a virtual environment for the project (to
 
 `pipenv install` - Create virtual environment and install dependencies
 
-`pipenv shell` - Activate virtual environment
+`pipenv shell` - Activate virtual environment. If it fails, try running [`exit`](https://stackoverflow.com/questions/58394338/using-pipenv-shell-after-pipenv-install-yields-shell-for-unknown-virtual-en) beforehand.
 
 Most of the website's functionality depends on being connected to a MongoDB database. If you wish to use your own database, just set the `MONGO_URI` environment variable in the `.env.example` file to your database URI connection string and rename the `.env.example` file to `.env`; alternatively, set `MONGO_URI` as an environment variable of the system hosting the application.
 
