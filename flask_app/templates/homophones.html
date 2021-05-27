@@ -4,7 +4,7 @@
 {%- for word in homophones %}
 {%- if loop.last %} and {{ word.word }}
 {%- elif loop.index == homophones|length - 1 %} {{word.word}}
-{%- else -%}
+{%- else %}
   {{ word.word }},
 {%- endif -%}
 {%- endfor %} - French Homophones
