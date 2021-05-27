@@ -70,6 +70,10 @@ body {
     /* background-color: #1C3337; */
 }
 
+li.page-item {
+    box-shadow: 0px 8px 15px rgba(127, 127, 127, 0.1);
+}
+
 .card#main:hover>*:not(.card-img-overlay) {
     transition: 0.2s ease;
     -webkit-filter: blur(0px);
